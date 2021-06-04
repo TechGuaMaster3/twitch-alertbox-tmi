@@ -1,0 +1,239 @@
+.widget-AlertBox {
+    position: relative;
+  }
+  body,
+  html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  #wrap {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  #alert-box {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+  #alert-box.hidden,
+  .hidden {
+    opacity: 0;
+  }
+  #alert-text {
+    padding: 20px;
+    text-shadow: 0px 0px 1px #000, 0px 0px 2px #000, 0px 0px 3px #000, 0px 0px 4px #000, 0px 0px 5px #000;
+  }
+  #alert-message,
+  #alert-user-message {
+    text-align: center;
+  }
+  #alert-user-message img {
+    vertical-align: middle;
+    height: 1em;
+  }
+  #alert-image {
+    position: relative;
+  }
+  #alert-image video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  #alert-message > span > span {
+    display: inline-block;
+  }
+  #alert-image {
+    z-index: 6;
+    position: relative;
+  }
+  #alert-text {
+    z-index: 6;
+    position: relative;
+  }
+  #alert-text-wrap {
+    z-index: 6;
+    position: relative;
+  }
+
+  body[data-layout="above"] #wrap,
+  .widget-AlertBox[data-layout="above"] #wrap {
+      display: table;
+  }
+  body[data-layout="above"] #alert-image,
+  .widget-AlertBox[data-layout="above"] #alert-image {
+      height: 100%;
+      display: table-cell;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      background-size: contain;
+  }
+  body[data-layout="above"] #alert-text,
+  .widget-AlertBox[data-layout="above"] #alert-text {
+      display: table-cell;
+      text-align: center;
+  }
+  body[data-layout="above"] #alert-image-wrap,
+  body[data-layout="above"] #alert-text-wrap,
+  .widget-AlertBox[data-layout="above"] #alert-image-wrap,
+  .widget-AlertBox[data-layout="above"] #alert-text-wrap {
+      display: table-row;
+  }
+  /* image and text centered and stretched for text over a banner */
+  
+  body[data-layout="banner"] #alert-image,
+  .widget-AlertBox[data-layout="banner"] #alert-image {
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: contain;
+  }
+  body[data-layout="banner"] #alert-image-wrap,
+  body[data-layout="banner"] #alert-text-wrap,
+  .widget-AlertBox[data-layout="banner"] #alert-image-wrap,
+  .widget-AlertBox[data-layout="banner"] #alert-text-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: table;
+      height: 100%;
+      width: 100%;
+  }
+  body[data-layout="banner"] #alert-image,
+  body[data-layout="banner"] #alert-text,
+  .widget-AlertBox[data-layout="banner"] #alert-image,
+  .widget-AlertBox[data-layout="banner"] #alert-text {
+      display: table-cell;
+      height: 100%;
+      width: 100%;
+      vertical-align: middle;
+      text-align: center;
+  }
+  /* image on left side */
+  
+  body[data-layout="side"] #alert-box,
+    .widget-AlertBox[data-layout="side"] #alert-box {
+      display: table;
+  }
+  body[data-layout="side"] #wrap,
+  .widget-AlertBox[data-layout="side"] #wrap {
+      display: table-row;
+  }
+  body[data-layout="side"] #alert-image-wrap,
+  .widget-AlertBox[data-layout="side"] #alert-image-wrap {
+      width: 30%;
+      height: 100%;
+      display: table-cell;
+  }
+  body[data-layout="side"] #alert-image,
+  .widget-AlertBox[data-layout="side"] #alert-image {
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 100%;
+      height: 100%;
+  }
+  body[data-layout="side"] #alert-text-wrap,
+  .widget-AlertBox[data-layout="side"] #alert-text-wrap {
+      width: 70%;
+      height: 100%;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: left;
+  }
+  body[data-layout="side"] #alert-text,
+  .widget-AlertBox[data-layout="side"] #alert-text {
+      display: inline-block;
+  }
+  .widget-AlertBox[data-layout="banner"] #alert-image,
+  body[data-layout="banner"] #alert-image {
+      z-index: 4;
+  }
+  .hidden {
+    opacity: 0;
+  }
+
+  
+#boombox iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 135px;
+    border: none;
+    opacity: 0;
+  }
+  
+  #boombox iframe.show {
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #boombox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 38px;
+    right: 0;
+    z-index: 10000;
+  }
+  
+  #widget {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+  }
+  
+  #shield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10001;
+  }
+  
+  #shield > div {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 38px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #FFF;
+    text-align: right;
+    padding-right: 10px;
+    box-sizing: border-box;
+  }
+  
+  #particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    transition: opacity 1000ms;
+  }
+  
+  #gif {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+  
+  #mp4-video {
+    object-fit: contain;
+    width: 100%;
+    max-width: 50%;
+    max-height: 50%;
+  }
