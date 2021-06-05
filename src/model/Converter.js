@@ -1,5 +1,6 @@
+import cheerJson from '../cheer.json'
 class Converter {
-    splitTextV1 = (t, e, n, c) => {
+    splitTextV1 = (t, e, n, c, v) => {
         var r = [];
         function text(o, i) {
             if (e[i] && o.trim().length)
@@ -31,16 +32,20 @@ class Converter {
         var cheerRegex = /([0-9])\d+/g;
         var cheerList = c.match(cheerRegex);
         var cheerTotal = 0;
-        if(cheerList){
-            cheerList.forEach(function(t){
+        if (cheerList) {
+            cheerList.forEach(function (t) {
                 cheerTotal = cheerTotal + parseInt(t);
             })
         }
-        out.unshift(cheerTotal);
-        return out;
+        var data = {
+            count: cheerTotal,
+            display: v,
+            message: out
+        }
+        return data;
     }
 
-    formatText = (t, e, n) => {
+    formatText = (t, e, n, z) => {
         var space = /\s+/g;
         //var comma = /,/g;
         t = t.replace(space, ' ');
@@ -59,13 +64,45 @@ class Converter {
         })));
         var c = "";
         var b = l;
+        var v = u;
+        v = this.formatTwitchEmotes(v,z);
         g.forEach((function (t) {
+            var color, height;
+            var i = parseInt(t[3]);
+            if (parseInt(t[3]) >= 1e4) { color = "red"; height = 10000; }
+            if (parseInt(t[3]) >= 5e3 && parseInt(t[3]) <= 9999) { color = "blue"; height = 5000; }
+            if (parseInt(t[3]) >= 1e3 && parseInt(t[3]) <= 4999) { color = "#2dfdbe"; height = 1000; }
+            if (parseInt(t[3]) >= 100 && parseInt(t[3]) <= 999) { color = "#be61ff"; height = 100; }
+            if (parseInt(t[3]) >= 1 && parseInt(t[3]) <= 99) { color = "grey"; height = 1; }
+            var temp1 = t[2].toLowerCase();
+            var temp2 = cheerJson[temp1][height];
+            v = v.replace(t[0], "<img src='" + temp2 + "' /><font color='" + color + "'>" + t[3] + "</font>");
             b = b.replace(t[0], "");
             c = c + t[0] + ' ';
         }))
         l = b;
         l = l.replace(/((?:https?|ftp):\/\/[\n\S]+)|(<([^>]+)>)+/gi, "").trim();
-        return this.splitTextV1(l, e, n, c);
+        return this.splitTextV1(l, e, n, c, v);
+    }
+
+    formatTwitchEmotes = (text, emotes) => {
+        let link = 'http://static-cdn.jtvnw.net/emoticons/v1/';
+        var splitText = Array.from(text);
+        for (var i in emotes) {
+            var e = emotes[i];
+            for (var j in e) {
+                var mote = e[j];
+                if (typeof mote === 'string') {
+                    mote = mote.split('-');
+                    mote = [parseInt(mote[0]), parseInt(mote[1])];
+                    var length = mote[1] - mote[0];
+                    var empty = Array.apply(null, new Array(length + 1)).map(function () { return ''; });
+                    splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[1] + 1, splitText.length));
+                    splitText.splice(mote[0], 1, `<img class="emoticon" src="${link}${i}/3.0">`);
+                };
+            };
+        }
+        return splitText.join('');
     }
 }
 

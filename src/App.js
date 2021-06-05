@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React, { Component } from 'react';
 import './App.css';
 import Cheer from './Components/Cheer';
@@ -7,23 +6,10 @@ import Converter from './model/Converter'
 import AudioPlayer from 'react-audio-player';
 import SubSound from './sound/sub.mp3';
 import CheerSound from './sound/cheer.mp3';
-import SubSound2 from './sound/sub2.mp3';
-import SubSound3 from './sound/sub3.mp3';
 import tmi from 'tmi.js'
 
 var queue = [];
 var current = null;
-
-/* 
-{
-  type: 'c',
-  user: '',
-  messageAll: '',
-  message: [],
-  cheer: 0,
-  subPlayed: false;
- }
-*/
 
 class App extends Component {
   state = {
@@ -32,12 +18,11 @@ class App extends Component {
     printState: false,
     playState: false,
     subState: false,
-    subUser: '門特魯',
-    subMessage: '👲🤸',
     cheerState: false,
-    cheerUser: '門特魯',
-    cheerBits: 0,
-    cheerMessage: '👲🤸'
+    user: '門特魯',
+    bits: 0,
+    message: '👲🤸',
+    emotes: null
   }
 
   componentDidMount() {
@@ -57,8 +42,8 @@ class App extends Component {
         secure: true
       },
       identity: {
-        username: 'ichinose',
-        password: 'shiki'
+        username: 'justinfan123456 ',
+        password: ''
       },
       channels: ['tetristhegrandmaster3']
     });
@@ -70,10 +55,11 @@ class App extends Component {
       var data = {
         type: 's',
         user: username,
-        messageAll: message,
+        messageAll: Converter.formatTwitchEmotes(message, userstate.emotes),
         message: [],
         soundUrl: playList,
-        cheer: 0
+        cheer: 0,
+        emotes: userstate.emotes
       }
       queue.push(data);
       if (!this.state.running) {
@@ -90,10 +76,11 @@ class App extends Component {
       var data = {
         type: 's',
         user: username,
-        messageAll: message,
+        messageAll: Converter.formatTwitchEmotes(message, userstate.emotes),
         message: [],
         soundUrl: playList,
-        cheer: 0
+        cheer: 0,
+        emotes: userstate.emotes
       }
       queue.push(data);
       if (!this.state.running) {
@@ -104,21 +91,22 @@ class App extends Component {
       }
     });
     client.on('cheer', (channel, userstate, message) => {
-      var result = Converter.formatText(message, [".", "!", "?", ":", ";", ",", " "], 90);
-      var bit = result.shift();
+      var result = Converter.formatText(message, [".", "!", "?", ":", ";", ",", " "], 90, userstate.emotes);
+      var bit = result.count;
       var playList = [];
       playList.push(CheerSound);
-      result.forEach(function (t) {
+      result.message.forEach(function (t) {
         var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
         playList.push(result);
       })
       var data = {
         type: 'c',
         user: userstate['display-name'],
-        messageAll: message,
-        message: result,
+        messageAll: result.display,
+        message: result.message,
         soundUrl: playList,
-        cheer: bit
+        cheer: userstate.bits,
+        emotes: userstate.emotes
       }
       queue.push(data);
       if (!this.state.running) {
@@ -130,43 +118,50 @@ class App extends Component {
     });
 
     client.on('message', (target, context, msg, self) => {
-      // var result = Converter.formatText(msg, [".", "!", "?", ":", ";", ",", " "], 90);
-      // var bit = result.shift();
-      // var playList = [];
-      // console.log(result);
-      // // queue.push(msg);
-      // console.log(msg);
-      // console.log(bit);
-      // if (bit == 0) {
-      //   playList.push(SubSound);
-      //   playList.push(this.getApiUrl(msg));
-      //   var data = {
-      //     type: 's',
-      //     user: context.username,
-      //     messageAll: msg,
-      //     message: [],
-      //     soundUrl: playList,
-      //     cheer: 0
-      //   }
-      //   queue.push(data);
-      // }
-      // else {
-      //   playList.push(CheerSound);
-      //   result.forEach(function (t) {
-      //     var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
-      //     playList.push(result);
-      //   })
-      //   var data = {
-      //     type: 'c',
-      //     user: context.username,
-      //     messageAll: msg,
-      //     message: result,
-      //     soundUrl: playList,
-      //     cheer: bit
-      //   }
-      //   queue.push(data);
-      // }
+      var playList = [];
+      if(msg == "!戴口罩勤洗手要消毒" && (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod)){
+        playList.push(SubSound);
+        var i = (context.username == 'tetristhegrandmaster3')? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
+        playList.push(this.getApiUrl(i));
+        var data = {
+          type: 's',
+          user: (context.username == 'zatd39')? "技正" : context["display-name"],
+          messageAll: Converter.formatTwitchEmotes(i, context.emotes),
+          message: [],
+          soundUrl: playList,
+          cheer: 0,
+          emotes: context.emotes
+        }
+        queue.push(data);
+        if (!this.state.running) {
+          this.setState({
+            running: true
+          })
+          this.alertExec();
+        }
+      }
     });
+    client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
+      var playList = [];
+      playList.push(SubSound);
+      playList.push(this.getApiUrl(''));
+      var data = {
+        type: 's',
+        user: recipient,
+        messageAll: null,
+        message: [],
+        soundUrl: playList,
+        cheer: 0,
+        emotes: userstate.emotes
+      }
+      queue.push(data);
+      if (!this.state.running) {
+        this.setState({
+          running: true
+        })
+        this.alertExec();
+      }
+  });
   }
 
   alertExec = () => {
@@ -176,12 +171,11 @@ class App extends Component {
     this.setState({
       sound: sound,
       subState: (current.type == 's') ? true : false,
-      subUser: current.user,
-      subMessage: current.messageAll,
       cheerState: (current.type == 'c') ? true : false,
-      cheerUser: current.user,
-      cheerMessage: current.messageAll,
-      cheerBits: current.cheer 
+      user: current.user,
+      message: current.messageAll,
+      bits: current.cheer,
+      emotes: current.emotes
     })
     setTimeout(() => this.printEnd(), 10000);
   }
@@ -195,21 +189,21 @@ class App extends Component {
   }
 
   printCooldown = () => {
-    if(this.state.playState){
+    if (this.state.playState) {
       this.setState({
         playState: false,
         printState: false
       })
-      if(queue.length){
+      if (queue.length) {
         this.alertExec();
       }
-      else{
+      else {
         this.setState({
           running: false
         })
       }
     }
-    else{
+    else {
       this.setState({
         printState: true
       })
@@ -227,21 +221,21 @@ class App extends Component {
       })
     }
     else {
-      if(this.state.printState){
+      if (this.state.printState) {
         this.setState({
           playState: false,
           printState: false
         })
-        if(queue.length){
+        if (queue.length) {
           this.alertExec();
         }
-        else{
+        else {
           this.setState({
             running: false
           })
         }
       }
-      else{
+      else {
         this.setState({
           playState: true
         })
@@ -254,10 +248,10 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <div className={(this.state.subState) ? 'fadeIn' : 'fadeOut'}>
-            <Sub username={this.state.subUser} message={this.state.subMessage} />
+            <Sub username={this.state.user} message={this.state.message}/>
           </div>
           <div className={(this.state.cheerState) ? 'fadeIn' : 'fadeOut'}>
-            <Cheer username={this.state.cheerUser} message={this.state.subMessage} bits={this.state.cheerBits} />
+            <Cheer username={this.state.user} message={this.state.message} bits={this.state.bits}/>
           </div>
         </header>
         <AudioPlayer

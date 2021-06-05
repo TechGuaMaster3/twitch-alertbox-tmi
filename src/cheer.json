@@ -1,0 +1,254 @@
+{
+    "cheer": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheer/light/animated/10000/4.gif"
+    },
+    "doodlecheer": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/doodlecheer/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/doodlecheer/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/doodlecheer/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/doodlecheer/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/doodlecheer/light/animated/10000/4.gif"
+    },
+    "tgm3cheer": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/partner-actions/47281189/096961ec-39cc-4803-9bfc-9567e2f3bbb4/1/light/animated/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/partner-actions/47281189/096961ec-39cc-4803-9bfc-9567e2f3bbb4/100/light/animated/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/partner-actions/47281189/096961ec-39cc-4803-9bfc-9567e2f3bbb4/1000/light/animated/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/partner-actions/47281189/096961ec-39cc-4803-9bfc-9567e2f3bbb4/5000/light/animated/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/partner-actions/47281189/096961ec-39cc-4803-9bfc-9567e2f3bbb4/10000/light/animated/4.gif"
+    },
+    "biblethump": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/biblethump/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/biblethump/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/biblethump/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/biblethump/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/biblethump/light/animated/10000/4.gif"
+    },
+    "cheerwhal": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheerwhal/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheerwhal/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheerwhal/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheerwhal/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/cheerwhal/light/animated/10000/4.gif"
+    },
+    "corgo": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/corgo/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/corgo/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/corgo/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/corgo/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/corgo/light/animated/10000/4.gif"
+    },
+    "scoops": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/scoops/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/scoops/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/scoops/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/scoops/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/scoops/light/animated/10000/4.gif"
+    },
+    "uni": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/uni/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/uni/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/uni/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/uni/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/uni/light/animated/10000/4.gif"
+    },
+    "showlove": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/showlove/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/showlove/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/showlove/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/showlove/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/showlove/light/animated/10000/4.gif"
+    },
+    "party": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/party/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/party/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/party/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/party/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/party/light/animated/10000/4.gif"
+    },
+    "seemsgood": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/seemsgood/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/seemsgood/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/seemsgood/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/seemsgood/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/seemsgood/light/animated/10000/4.gif"
+    },
+    "pride": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pride/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pride/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pride/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pride/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pride/light/animated/10000/4.gif"
+    },
+    "kappa": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kappa/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kappa/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kappa/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kappa/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kappa/light/animated/10000/4.gif"
+    },
+    "frankerz": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/frankerz/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/frankerz/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/frankerz/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/frankerz/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/frankerz/light/animated/10000/4.gif"
+    },
+    "heyguys": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/heyguys/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/heyguys/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/heyguys/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/heyguys/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/heyguys/light/animated/10000/4.gif"
+    },
+    "dansgame": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/dansgame/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/dansgame/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/dansgame/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/dansgame/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/dansgame/light/animated/10000/4.gif"
+    },
+    "elegiggle": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/elegiggle/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/elegiggle/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/elegiggle/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/elegiggle/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/elegiggle/light/animated/10000/4.gif"
+    },
+    "trihard": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/trihard/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/trihard/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/trihard/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/trihard/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/trihard/light/animated/10000/4.gif"
+    },
+    "kreygasm": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kreygasm/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kreygasm/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kreygasm/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kreygasm/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/kreygasm/light/animated/10000/4.gif"
+    },
+    "4head": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/4head/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/4head/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/4head/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/4head/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/4head/light/animated/10000/4.gif"
+    },
+    "swiftrage": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/swiftrage/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/swiftrage/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/swiftrage/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/swiftrage/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/swiftrage/light/animated/10000/4.gif"
+    },
+    "notlikethis": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/notlikethis/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/notlikethis/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/notlikethis/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/notlikethis/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/notlikethis/light/animated/10000/4.gif"
+    },
+    "failfish": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/failfish/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/failfish/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/failfish/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/failfish/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/failfish/light/animated/10000/4.gif"
+    },
+    "vohiyo": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/vohiyo/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/vohiyo/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/vohiyo/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/vohiyo/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/vohiyo/light/animated/10000/4.gif"
+    },
+    "pjsalt": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pjsalt/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pjsalt/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pjsalt/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pjsalt/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/pjsalt/light/animated/10000/4.gif"
+    },
+    "mrdestructoid": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/mrdestructoid/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/mrdestructoid/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/mrdestructoid/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/mrdestructoid/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/mrdestructoid/light/animated/10000/4.gif"
+    },
+    "bday": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bday/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bday/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bday/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bday/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bday/light/animated/10000/4.gif"
+    },
+    "ripcheer": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/ripcheer/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/ripcheer/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/ripcheer/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/ripcheer/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/ripcheer/light/animated/10000/4.gif"
+    },
+    "shamrock": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/shamrock/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/shamrock/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/shamrock/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/shamrock/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/shamrock/light/animated/10000/4.gif"
+    },
+    "bitboss": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bitboss/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bitboss/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bitboss/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bitboss/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/bitboss/light/animated/10000/4.gif"
+    },
+    "streamlabs": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/streamlabs/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/streamlabs/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/streamlabs/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/streamlabs/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/streamlabs/light/animated/10000/4.gif"
+    },
+    "muxy": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/muxy/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/muxy/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/muxy/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/muxy/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/muxy/light/animated/10000/4.gif"
+    },
+    "holidaycheer": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/holidaycheer/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/holidaycheer/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/holidaycheer/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/holidaycheer/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/holidaycheer/light/animated/10000/4.gif"
+    },
+    "goal": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/goal/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/goal/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/goal/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/goal/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/goal/light/animated/10000/4.gif"
+    },
+    "anon": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/anon/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/anon/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/anon/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/anon/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/anon/light/animated/10000/4.gif"
+    },
+    "charity": {
+        "1": "https://d3aqoihi2n8ty8.cloudfront.net/actions/charity/light/animated/1/4.gif",
+        "100": "https://d3aqoihi2n8ty8.cloudfront.net/actions/charity/light/animated/100/4.gif",
+        "1000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/charity/light/animated/1000/4.gif",
+        "5000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/charity/light/animated/5000/4.gif",
+        "10000": "https://d3aqoihi2n8ty8.cloudfront.net/actions/charity/light/animated/10000/4.gif"
+    }
+}
