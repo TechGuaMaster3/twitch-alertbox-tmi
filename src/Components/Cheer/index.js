@@ -6,7 +6,8 @@ import './Cheer.css';
 class Cheer extends Component {
 
     render() {
-        const { username, bits, message } = this.props;
+        const { username, bits, message, cheerImg } = this.props;
+        const imgList = require(`../../img/bit/bit (${cheerImg}).gif`)
         return (
             <div>
                 <div id="widget" className="widget-AlertBox" data-layout="side">
@@ -14,7 +15,7 @@ class Cheer extends Component {
                         <div id="particles" className="hidden" />
                         <div id="wrap">
                             <div id="alert-image-wrap">
-                                <div id="alert-image" style={{ backgroundImage: 'url("https://uploads.twitchalerts.com/000/047/281/189/289.gif")' }}><img style={{ height: '1px', opacity: 0, width: '1px' }} src="https://uploads.twitchalerts.com/000/047/281/189/289.gif" /></div>
+                                <div id="alert-image" style={{ backgroundImage: 'url("' + imgList.default + '")' }}><img style={{ height: '1px', opacity: 0, width: '1px' }} src={imgList.default} /></div>
                             </div>
                             <div id="alert-text-wrap">
                                 <div id="alert-text">

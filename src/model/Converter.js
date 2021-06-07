@@ -48,9 +48,10 @@ class Converter {
     formatText = (t, e, n, z) => {
         var space = /\s+/g;
         //var comma = /,/g;
+        var vv = t;
         t = t.replace(space, ' ');
         //t = t.replace(comma, '');
-        var u = t,
+        var u = vv,
             l = t,
             f = ["cheer", "doodlecheer", "biblethump", "cheerwhal", "corgo", "scoops", "party", "seemsgood", "pride", "uni", "showlove", "kappa", "frankerz", "heyguys", "dansgame", "elegiggle", "trihard", "kreygasm", "4head", "swiftrage", "notlikethis", "failfish", "vohiyo", "pjsalt", "mrdestructoid", "bday", "ripcheer", "shamrock", "bitboss", "streamlabs", "muxy", "holidaycheer", "goal", "anon", "charity", "tgm3cheer"]
         u.length > 300 && (u = "".concat(u.substring(0, 296), "..."));
