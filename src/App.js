@@ -95,9 +95,10 @@ class App extends Component {
       var playList = [];
       var msg = "";
       playList.push(SubSound);
-      message = (message == null) ? "" : message;
-      playList.push(this.getApiUrl(message));
-      msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+      if (message != null && message !="") {
+        playList.push(this.getApiUrl(message));
+        msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+      }
       var data = {
         type: 's',
         user: username,
@@ -175,7 +176,7 @@ class App extends Component {
         var result = Converter.formatText(i, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
         var data = {
           type: 'c',
-          user: 'Google',
+          user: '皮皮船',
           messageAll: result.display,
           message: result.message,
           soundUrl: playList,
