@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Converter from '../../model/Converter';
 import parse from 'html-react-parser';
 import './Cheer.css';
 
