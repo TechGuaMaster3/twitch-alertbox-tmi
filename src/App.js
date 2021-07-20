@@ -7,12 +7,13 @@ import Converter from './model/Converter'
 import AudioPlayer from 'react-audio-player';
 import SubSound from './sound/sub.mp3';
 import CheerSound from './sound/cheer.mp3';
+import BasiliskSound from './sound/basilisk.mp3';
 import tmi from 'tmi.js'
 const io = require("socket.io-client");
 
 const gifCount = 40;
-const bgifCount = 17;
-const channelList = ['tetristhegrandmaster3'];
+const bgifCount = 21;
+const channelList = ['tetristhegrandmaster3','zatd93'];
 
 var queue = [];
 var current = null;
@@ -34,7 +35,12 @@ class App extends Component {
     donationAmount: "",
     basilisk: false,
     kero: false,
-    mao: false
+    mao: false,
+    basiliskSound: null,
+    tmiUser: false,
+    recallType: "",
+    recallUser: "",
+    recallStatus: false
   }
 
   componentDidMount() {
@@ -78,10 +84,20 @@ class App extends Component {
   }
 
   initTmi = () => {
-    const params = new URLSearchParams(window.location.search).get('token');
+    const paramsToken = new URLSearchParams(window.location.search).get('token');
+    const paramsUser = new URLSearchParams(window.location.search).get('user');
+    const paramsKey = new URLSearchParams(window.location.search).get('key');
     //const foo = params.get(''); 
-    console.log(params);
-    var token = params;
+    console.log(paramsToken);
+    console.log(paramsUser);
+    console.log(paramsKey);
+    if(paramsUser){ 
+      this.setState ({
+        tmiUser: true
+      })
+    }
+    var token = paramsToken;
+
 
     //Connect to socket
     const streamlabs = io(`https://sockets.streamlabs.com?token=${token}`, { transports: ['websocket'] });
@@ -193,8 +209,8 @@ class App extends Component {
         secure: true
       },
       identity: {
-        username: 'justinfan123456 ',
-        password: ''
+        username: (paramsUser) ? paramsUser : 'justinfan123456',
+        password: (paramsKey) ? paramsKey : ''
       },
       channels: channelList
     });
@@ -303,7 +319,9 @@ class App extends Component {
 
     client.on('message', (target, context, msg, self) => {
       var playList = [];
-      if (msg == "!戴口罩勤洗手要消毒" && (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod)) {
+      var result;
+      var isMod = (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod);
+      if (isMod && msg == "!戴口罩勤洗手要消毒") {
         playList.push(SubSound);
         var i = (context.username == 'tetristhegrandmaster3') ? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
         playList.push(this.getApiUrl(i));
@@ -326,11 +344,11 @@ class App extends Component {
           this.alertExec();
         }
       }
-      if ((msg == "!彩學好帥" || msg == "!彩學很帥") && (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod)) {
+      if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
         playList.push(CheerSound);
         i = "tgm3Cheer878787 巴雞栗鼠哭";
         playList.push(this.getApiUrl("巴雞栗鼠哭"));
-        var result = Converter.formatText(i, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
+        result = Converter.formatText(i, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
         data = {
           type: 'c',
           user: '皮皮船',
@@ -350,13 +368,13 @@ class App extends Component {
           this.alertExec();
         }
       }
-      if ((msg.split(' ')[0].toLowerCase() == "!basilisktime") && (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod)) {
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!basilisktime")) {
         this.setState({
           basilisk: (msg.split(' ')[1].toLowerCase() == 'on') ? true : false
         })
         console.log("Basilisk Time")
       }
-      if ((msg == "!小狗><") && (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod)) {
+      if (isMod && (msg == "!小狗><")) {
         playList.push(CheerSound);
         i = "冥白了";
         playList.push(this.getApiUrl(i));
@@ -380,21 +398,100 @@ class App extends Component {
         }
       }
 
-      if ((msg.split(' ')[0].toLowerCase() == "!厄介mode") && (context.username == 'taikonokero' )) {
+      if (isMod && this.state.tmiUser && (msg == "!2.0")) {
+        var text = "!戴口罩勤洗手要消毒 [SubTest] | !彩學好帥/!彩學很帥 [BitsTest] | !小狗 [DonateTest] | !basilisktime on/off [Basilisk Time On/Off]  | !reload2.0 [Reload AlertBox 2.0]"
+        client.say(target, text);
+      }
+
+      if ((msg.split(' ')[0].toLowerCase() == "!厄介mode") && (context.username == 'taikonokero')) {
         this.setState({
           kero: (msg.split(' ')[1].toLowerCase() == 'on') ? true : false
         })
       }
 
-      if ((msg.split(' ')[0].toLowerCase() == "!厄介mode") && (context.username == 'feline_mao' )) {
+      if ((msg.split(' ')[0].toLowerCase() == "!厄介mode") && (context.username == 'feline_mao')) {
         this.setState({
           mao: (msg.split(' ')[1].toLowerCase() == 'on') ? true : false
         })
       }
+      if (isMod && this.state.recallStatus) {       
+        if(this.state.recallType == "c"){
+          playList.push(CheerSound);
+          result = Converter.formatText(msg, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
+          result.message.forEach(function (t) {
+            var re = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
+            playList.push(re);
+          })
+          data = {
+            type: 'c',
+            user: this.state.recallUser,
+            messageAll: result.display,
+            message: result.message,
+            soundUrl: playList,
+            cheer: result.count,
+            emotes: context.emotes,
+            cheerImg: this.getRamdom(false),
+            donation: ""
+          }
+          queue.push(data);
+          if (!this.state.running) {
+            this.setState({
+              running: true
+            })
+            this.alertExec();
+          }
+        }
+        if(this.state.recallType == "s"){
+          playList.push(SubSound);
+          if (msg != "0") {
+            playList.push(this.getApiUrl(msg));
+          }
+          data = {
+            type: 's',
+            user: this.state.recallUser,
+            messageAll: (msg != "0") ? Converter.formatTwitchEmotes(msg, context.emotes) : "",
+            message: [],
+            soundUrl: playList,
+            cheer: 0,
+            emotes: context.emotes,
+            cheerImg: 0,
+            donation: ""
+          }
+          queue.push(data);
+          if (!this.state.running) {
+            this.setState({
+              running: true
+            })
+            this.alertExec();
+          }
+        }
+        this.setState({
+          recallType: "",
+          recallStatus: false,
+          recallUser: ""
+        })
+      }
 
-      if ((msg == "!reload2.0") && (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod)) {
+      if ((msg == "!reload2.0") && isMod) {
         window.location.reload();
       }
+    
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!cheer") && (msg.split(' ')[1])) {
+        this.setState({
+          recallType: "c",
+          recallStatus: true,
+          recallUser: msg.split(' ')[1]
+        })
+      }
+
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!sub") && (msg.split(' ')[1])) {
+        this.setState({
+          recallType: "s",
+          recallStatus: true,
+          recallUser: msg.split(' ')[1]
+        })
+      }
+
     });
   }
 
@@ -485,6 +582,18 @@ class App extends Component {
     }
   }
 
+  basiliskSoundSet = () => {
+    this.setState({
+      basiliskSound: BasiliskSound
+    })
+  }
+
+  basiliskSoundEnd = () => {
+    this.setState({
+      basiliskSound: null
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -504,6 +613,12 @@ class App extends Component {
           title={""}
           autoPlay
           onEnded={this.soundEnd}
+        />
+        <AudioPlayer
+          src={this.state.basiliskSound}
+          title={""}
+          autoPlay
+          onEnded={this.basiliskSoundEnd}
         />
       </div>
     );
