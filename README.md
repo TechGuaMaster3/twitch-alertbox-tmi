@@ -10,6 +10,9 @@
 
 ## 版本
 
+### version 0.5.0
+- 支援 Tier 3 sub
+
 ### version 0.4.1
 - 限定basilisk卡池新增
 - 新增聊天室自行recall功能

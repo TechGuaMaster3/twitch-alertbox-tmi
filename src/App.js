@@ -6,6 +6,7 @@ import Donation from './Components/Donation';
 import Converter from './model/Converter'
 import AudioPlayer from 'react-audio-player';
 import SubSound from './sound/sub.mp3';
+import SubT3Sound from './sound/sub_t3.mp3';
 import CheerSound from './sound/cheer.mp3';
 import BasiliskSound from './sound/basilisk.mp3';
 import tmi from 'tmi.js'
@@ -40,7 +41,8 @@ class App extends Component {
     tmiUser: false,
     recallType: "",
     recallUser: "",
-    recallStatus: false
+    recallStatus: false,
+    subType:false
   }
 
   componentDidMount() {
@@ -215,58 +217,118 @@ class App extends Component {
       channels: channelList
     });
     client.connect().catch(console.error);
-    // client.on('subscription', (channel, username, method, message, userstate) => {
-    //   var playList = [];
-    //   var msg = "";
-    //   playList.push(SubSound);
-    //   if (message != null) {
-    //     playList.push(this.getApiUrl(message));
-    //     msg = Converter.formatTwitchEmotes(message, userstate.emotes);
-    //   }
-    //   var data = {
-    //     type: 's',
-    //     user: username,
-    //     messageAll: msg,
-    //     message: [],
-    //     soundUrl: playList,
-    //     cheer: 0,
-    //     emotes: userstate.emotes,
-    //     cheerImg: 0
-    //   }
-    //   queue.push(data);
-    //   if (!this.state.running) {
-    //     this.setState({
-    //       running: true
-    //     })
-    //     this.alertExec();
-    //   }
-    // });
-    // client.on('resub', (channel, username, months, message, userstate, methods) => {
-    //   var playList = [];
-    //   var msg = "";
-    //   playList.push(SubSound);
-    //   if (message != null && message != "") {
-    //     playList.push(this.getApiUrl(message));
-    //     msg = Converter.formatTwitchEmotes(message, userstate.emotes);
-    //   }
-    //   var data = {
-    //     type: 's',
-    //     user: username,
-    //     messageAll: msg,
-    //     message: [],
-    //     soundUrl: playList,
-    //     cheer: 0,
-    //     emotes: userstate.emotes,
-    //     cheerImg: 0
-    //   }
-    //   queue.push(data);
-    //   if (!this.state.running) {
-    //     this.setState({
-    //       running: true
-    //     })
-    //     this.alertExec();
-    //   }
-    // });
+    client.on('subscription', (channel, username, method, message, userstate) => {
+      // console.log(username);
+      // console.log(method);
+      // console.log(userstate);
+      if(method.plan == "3000"){
+        var playList = [];
+        var msg = "";
+        if (message != null && message != "") {
+          playList.push(this.getApiUrl(message));
+          msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+        }
+        var data = {
+          type: 's',
+          user: username,
+          messageAll: msg,
+          message: [],
+          soundUrl: playList,
+          cheer: 0,
+          emotes: userstate.emotes,
+          cheerImg: 0,
+          donation: "",
+          subType: true
+        }
+        queue.push(data);
+        if (!this.state.running) {
+          this.setState({
+            running: true
+          })
+          this.alertExec();
+        }
+      }
+      // var playList = [];
+      // var msg = "";
+      // playList.push(SubSound);
+      // if (message != null) {
+      //   playList.push(this.getApiUrl(message));
+      //   msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+      // }
+      // var data = {
+      //   type: 's',
+      //   user: username,
+      //   messageAll: msg,
+      //   message: [],
+      //   soundUrl: playList,
+      //   cheer: 0,
+      //   emotes: userstate.emotes,
+      //   cheerImg: 0
+      // }
+      // queue.push(data);
+      // if (!this.state.running) {
+      //   this.setState({
+      //     running: true
+      //   })
+      //   this.alertExec();
+      // }
+    });
+    client.on('resub', (channel, username, months, message, userstate, methods) => {
+      // console.log(username);
+      // console.log(methods);
+      // console.log(userstate);
+      if(methods.plan == "3000"){
+        var playList = [];
+        var msg = "";
+        if (message != null && message != "") {
+          playList.push(this.getApiUrl(message));
+          msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+        }
+        var data = {
+          type: 's',
+          user: username,
+          messageAll: msg,
+          message: [],
+          soundUrl: playList,
+          cheer: 0,
+          emotes: userstate.emotes,
+          cheerImg: 0,
+          donation: "",
+          subType: true
+        }
+        queue.push(data);
+        if (!this.state.running) {
+          this.setState({
+            running: true
+          })
+          this.alertExec();
+        }
+      }
+      // var playList = [];
+      // var msg = "";
+      // playList.push(SubSound);
+      // if (message != null && message != "") {
+      //   playList.push(this.getApiUrl(message));
+      //   msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+      // }
+      // var data = {
+      //   type: 's',
+      //   user: username,
+      //   messageAll: msg,
+      //   message: [],
+      //   soundUrl: playList,
+      //   cheer: 0,
+      //   emotes: userstate.emotes,
+      //   cheerImg: 0
+      // }
+      // queue.push(data);
+      // if (!this.state.running) {
+      //   this.setState({
+      //     running: true
+      //   })
+      //   this.alertExec();
+      // }
+    });
     // client.on('cheer', (channel, userstate, message) => {
     //   var result = Converter.formatText(message, [".", "!", "?", ":", ";", ",", " "], 90, userstate.emotes);
     //   var bit = result.count;
@@ -295,29 +357,59 @@ class App extends Component {
     //   }
     // });
 
-    // client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
+    client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
     //   var playList = [];
     //   playList.push(SubSound);
     //   var data = {
     //     type: 's',
-    //     user: recipient,
-    //     messageAll: "",
-    //     message: [],
-    //     soundUrl: playList,
-    //     cheer: 0,
-    //     emotes: userstate.emotes,
-    //     cheerImg: 0
-    //   }
-    //   queue.push(data);
-    //   if (!this.state.running) {
-    //     this.setState({
-    //       running: true
-    //     })
-    //     this.alertExec();
-    //   }
-    // });
+      if(methods.plan == "3000"){
+        var playList = [];
+        var data = {
+          type: 's',
+          user: recipient,
+          messageAll: "",
+          message: [],
+          soundUrl: playList,
+          cheer: 0,
+          emotes: userstate.emotes,
+          cheerImg: 0,
+          donation: "",
+          subType: true
+        }
+        queue.push(data);
+        if (!this.state.running) {
+          this.setState({
+            running: true
+          })
+          this.alertExec();
+        }
+      }
+      // var playList = [];
+      // playList.push(SubSound);
+      // var data = {
+      //   type: 's',
+      //   user: recipient,
+      //   messageAll: "",
+      //   message: [],
+      //   soundUrl: playList,
+      //   cheer: 0,
+      //   emotes: userstate.emotes,
+      //   cheerImg: 0
+      // }
+      // queue.push(data);
+      // if (!this.state.running) {
+      //   this.setState({
+      //     running: true
+      //   })
+      //   this.alertExec();
+      // }
+    });
 
     client.on('message', (target, context, msg, self) => {
+      // console.log(target);
+      // console.log(context);
+      // console.log(msg);
+      // console.log(self);
       var playList = [];
       var result;
       var isMod = (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod);
@@ -344,10 +436,35 @@ class App extends Component {
           this.alertExec();
         }
       }
+
+      if (isMod && msg == "!尊爵不凡") {
+        var i = "我郭";
+        playList.push(this.getApiUrl(i));
+        var data = {
+          type: 's',
+          user: (context.username == 'zatd39') ? "技正" : context["display-name"],
+          messageAll: Converter.formatTwitchEmotes(i, context.emotes),
+          message: [],
+          soundUrl: playList,
+          cheer: 0,
+          emotes: context.emotes,
+          cheerImg: 0,
+          donation: "",
+          subType: true
+        }
+        queue.push(data);
+        if (!this.state.running) {
+          this.setState({
+            running: true
+          })
+          this.alertExec();
+        }
+      }
+
       if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
         playList.push(CheerSound);
-        i = "tgm3Cheer878787 巴雞栗鼠哭";
-        playList.push(this.getApiUrl("巴雞栗鼠哭"));
+        i = "tgm3Cheer878787 笑死";
+        playList.push(this.getApiUrl("笑死"));
         result = Converter.formatText(i, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
         data = {
           type: 'c',
@@ -465,6 +582,30 @@ class App extends Component {
             this.alertExec();
           }
         }
+        if(this.state.recallType == "st"){
+          if (msg != "0") {
+            playList.push(this.getApiUrl(msg));
+          }
+          data = {
+            type: 's',
+            user: this.state.recallUser,
+            messageAll: (msg != "0") ? Converter.formatTwitchEmotes(msg, context.emotes) : "",
+            message: [],
+            soundUrl: playList,
+            cheer: 0,
+            emotes: context.emotes,
+            cheerImg: 0,
+            donation: "",
+            subType: true
+          }
+          queue.push(data);
+          if (!this.state.running) {
+            this.setState({
+              running: true
+            })
+            this.alertExec();
+          }
+        }
         this.setState({
           recallType: "",
           recallStatus: false,
@@ -492,12 +633,24 @@ class App extends Component {
         })
       }
 
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!subt3") && (msg.split(' ')[1])) {
+        this.setState({
+          recallType: "st",
+          recallStatus: true,
+          recallUser: msg.split(' ')[1]
+        })
+      }
+
     });
   }
 
   alertExec = () => {
     current = queue.shift();
     console.log(current);
+    if(current.subType){
+      var sound = (this.state.basilisk)? SubSound : SubT3Sound;
+      current.soundUrl.unshift(sound);
+    }
     var sound = current.soundUrl.shift();
     var img = (this.state.basilisk) ? this.getRamdom(true) : current.cheerImg;
     var name = (current.name) ? current.name : '';
@@ -513,7 +666,8 @@ class App extends Component {
       bits: current.cheer,
       emotes: current.emotes,
       cheerImg: img,
-      donationAmount: current.donation
+      donationAmount: current.donation,
+      subType: (current.subType)? true : false
     })
     setTimeout(() => this.printEnd(), 10000);
   }
@@ -599,7 +753,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <div className={(this.state.subState) ? 'fadeIn' : 'fadeOut'}>
-            <Sub username={this.state.user} message={this.state.message} />
+            <Sub username={this.state.user} message={this.state.message} subType={this.state.subType}/>
           </div>
           <div className={(this.state.cheerState) ? 'fadeIn' : 'fadeOut'}>
             <Cheer username={this.state.user} message={this.state.message} bits={this.state.bits} cheerImg={this.state.cheerImg} />
