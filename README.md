@@ -4,11 +4,15 @@
 而誕生的仿製 Alert Box for 彩學台
 
 #### 2021/06/08 StreamLab Alert box TTS 已修復，
-#### 目前仍於彩學台運作中
+#### 目前仍於[彩學台](https://www.twitch.tv/tetristhegrandmaster3)運作中
 
 (預計將此功能合併回斷句模擬器)
 
 ## 版本
+
+### version 0.6.0
+- 新增音效功能
+- basilisk mode 通知加速撥放(未運作)
 
 ### version 0.5.0
 - 支援 Tier 3 sub

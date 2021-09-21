@@ -7,14 +7,19 @@ import Converter from './model/Converter'
 import AudioPlayer from 'react-audio-player';
 import SubSound from './sound/sub.mp3';
 import SubT3Sound from './sound/sub_t3.mp3';
+import SubSoundFast from './sound/sub_fast.mp3';
 import CheerSound from './sound/cheer.mp3';
-import BasiliskSound from './sound/basilisk.mp3';
 import tmi from 'tmi.js'
+import SoundList from './SoundList';
 const io = require("socket.io-client");
 
 const gifCount = 40;
 const bgifCount = 21;
-const channelList = ['tetristhegrandmaster3','zatd93'];
+const channelList = ['tetristhegrandmaster3', 'tgm3backend'];
+const cooldownNormal = [10000, 5000];
+//TODO
+const cooldownFast = [10000, 5000];
+const updateTimeLog = "2021/09/22 ver3";
 
 var queue = [];
 var current = null;
@@ -37,12 +42,12 @@ class App extends Component {
     basilisk: false,
     kero: false,
     mao: false,
-    basiliskSound: null,
+    soundEffect: null,
     tmiUser: false,
     recallType: "",
     recallUser: "",
     recallStatus: false,
-    subType:false
+    subGift: false
   }
 
   componentDidMount() {
@@ -93,8 +98,9 @@ class App extends Component {
     console.log(paramsToken);
     console.log(paramsUser);
     console.log(paramsKey);
-    if(paramsUser){ 
-      this.setState ({
+    console.log(updateTimeLog);
+    if (paramsUser) {
+      this.setState({
         tmiUser: true
       })
     }
@@ -147,7 +153,7 @@ class App extends Component {
           playList = [];
           var msg = "";
           processEmotes = this.streamlabsEmotesFormatter(eventData.message[0].emotes);
-          playList.push(SubSound);
+          // playList.push(SubSound);
           if (eventData.message[0].message != null && eventData.message[0].message != "") {
             playList.push(this.getApiUrl(eventData.message[0].message));
             msg = Converter.formatTwitchEmotes(eventData.message[0].message, processEmotes);
@@ -161,7 +167,10 @@ class App extends Component {
             cheer: 0,
             emotes: processEmotes,
             cheerImg: 0,
-            donation: ""
+            donation: "",
+            //todo
+            // subGift: (eventData.message[0].sub_type == "subgift")
+            subGift: false
           }
           queue.push(data);
           if (!this.state.running) {
@@ -174,7 +183,7 @@ class App extends Component {
         if (eventData.type == 'bits') {
           processEmotes = this.streamlabsEmotesFormatter(eventData.message[0].emotes);
           result = Converter.formatText(eventData.message[0].message, [".", "!", "?", ":", ";", ",", " "], 90, processEmotes);
-          var bit = result.count;
+          // var bit = result.count;
           playList = [];
           playList.push(CheerSound);
           result.message.forEach(function (t) {
@@ -221,7 +230,7 @@ class App extends Component {
       // console.log(username);
       // console.log(method);
       // console.log(userstate);
-      if(method.plan == "3000"){
+      if (method.plan == "3000") {
         var playList = [];
         var msg = "";
         if (message != null && message != "") {
@@ -277,7 +286,7 @@ class App extends Component {
       // console.log(username);
       // console.log(methods);
       // console.log(userstate);
-      if(methods.plan == "3000"){
+      if (methods.plan == "3000") {
         var playList = [];
         var msg = "";
         if (message != null && message != "") {
@@ -358,11 +367,11 @@ class App extends Component {
     // });
 
     client.on("subgift", (channel, username, streakMonths, recipient, methods, userstate) => {
-    //   var playList = [];
-    //   playList.push(SubSound);
-    //   var data = {
-    //     type: 's',
-      if(methods.plan == "3000"){
+      //   var playList = [];
+      //   playList.push(SubSound);
+      //   var data = {
+      //     type: 's',
+      if (methods.plan == "3000") {
         var playList = [];
         var data = {
           type: 's',
@@ -374,7 +383,9 @@ class App extends Component {
           emotes: userstate.emotes,
           cheerImg: 0,
           donation: "",
-          subType: true
+          subType: true,
+          //TODO
+          subGift: false
         }
         queue.push(data);
         if (!this.state.running) {
@@ -412,12 +423,14 @@ class App extends Component {
       // console.log(self);
       var playList = [];
       var result;
-      var isMod = (context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod);
+      var i = "";
+      var data = {}
+      var isMod = ((context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod) && context.username != 'nightbot');
       if (isMod && msg == "!戴口罩勤洗手要消毒") {
-        playList.push(SubSound);
-        var i = (context.username == 'tetristhegrandmaster3') ? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
+        // playList.push(SubSound);
+        i = (context.username == 'tetristhegrandmaster3') ? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
         playList.push(this.getApiUrl(i));
-        var data = {
+        data = {
           type: 's',
           user: (context.username == 'zatd39') ? "技正" : context["display-name"],
           messageAll: Converter.formatTwitchEmotes(i, context.emotes),
@@ -438,9 +451,9 @@ class App extends Component {
       }
 
       if (isMod && msg == "!尊爵不凡") {
-        var i = "我郭";
+        i = "我郭";
         playList.push(this.getApiUrl(i));
-        var data = {
+        data = {
           type: 's',
           user: (context.username == 'zatd39') ? "技正" : context["display-name"],
           messageAll: Converter.formatTwitchEmotes(i, context.emotes),
@@ -487,9 +500,22 @@ class App extends Component {
       }
       if (isMod && (msg.split(' ')[0].toLowerCase() == "!basilisktime")) {
         this.setState({
-          basilisk: (msg.split(' ')[1].toLowerCase() == 'on') ? true : false
+          basilisk: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'on') ? true : false
         })
         console.log("Basilisk Time")
+      }
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!sound")) {
+        this.setState({
+          soundEffect: CheerSound
+        })
+        if (msg.split(' ')[1]) {
+          this.soundEffectSet(msg.split(' ')[1]);
+        }
+      }
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!stop")) {
+        this.setState({
+          soundEffect: CheerSound
+        })
       }
       if (isMod && (msg == "!小狗><")) {
         playList.push(CheerSound);
@@ -531,8 +557,8 @@ class App extends Component {
           mao: (msg.split(' ')[1].toLowerCase() == 'on') ? true : false
         })
       }
-      if (isMod && this.state.recallStatus) {       
-        if(this.state.recallType == "c"){
+      if (isMod && this.state.recallStatus) {
+        if (this.state.recallType == "c") {
           playList.push(CheerSound);
           result = Converter.formatText(msg, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
           result.message.forEach(function (t) {
@@ -558,8 +584,8 @@ class App extends Component {
             this.alertExec();
           }
         }
-        if(this.state.recallType == "s"){
-          playList.push(SubSound);
+        if (this.state.recallType == "s") {
+          // playList.push(SubSound);
           if (msg != "0") {
             playList.push(this.getApiUrl(msg));
           }
@@ -582,7 +608,7 @@ class App extends Component {
             this.alertExec();
           }
         }
-        if(this.state.recallType == "st"){
+        if (this.state.recallType == "st") {
           if (msg != "0") {
             playList.push(this.getApiUrl(msg));
           }
@@ -596,7 +622,7 @@ class App extends Component {
             emotes: context.emotes,
             cheerImg: 0,
             donation: "",
-            subType: true
+            subType: true,
           }
           queue.push(data);
           if (!this.state.running) {
@@ -616,7 +642,7 @@ class App extends Component {
       if ((msg == "!reload2.0") && isMod) {
         window.location.reload();
       }
-    
+
       if (isMod && (msg.split(' ')[0].toLowerCase() == "!cheer") && (msg.split(' ')[1])) {
         this.setState({
           recallType: "c",
@@ -647,9 +673,20 @@ class App extends Component {
   alertExec = () => {
     current = queue.shift();
     console.log(current);
-    if(current.subType){
-      var sound = (this.state.basilisk)? SubSound : SubT3Sound;
-      current.soundUrl.unshift(sound);
+    var bsound = null;
+    if(current.type == 's'){
+      if (current.subType) {
+        //TODO
+        // bsound = (this.state.basilisk && current.subGift) ? SubT3Sound : SubT3Sound;
+        bsound = (this.state.basilisk) ? SubSound : SubT3Sound;
+        current.soundUrl.unshift(bsound);
+      }
+      else {
+        //TODO
+        bsound = (this.state.basilisk && current.subGift) ? SubSound : SubSound;
+        current.soundUrl.unshift(bsound);
+      }
+
     }
     var sound = current.soundUrl.shift();
     var img = (this.state.basilisk) ? this.getRamdom(true) : current.cheerImg;
@@ -667,18 +704,20 @@ class App extends Component {
       emotes: current.emotes,
       cheerImg: img,
       donationAmount: current.donation,
-      subType: (current.subType)? true : false
+      subType: (current.subType) ? true : false,
+      subGift: current.subGift
     })
-    setTimeout(() => this.printEnd(), 10000);
+    setTimeout(() => this.printEnd(), (this.state.basilisk && current.subGift) ? cooldownFast[0] : cooldownNormal[0]);
   }
 
   printEnd = () => {
+    var gift = this.state.subGift;
     this.setState({
       subState: false,
       cheerState: false,
       donationState: false
     })
-    setTimeout(() => this.printCooldown(), 5000);
+    setTimeout(() => this.printCooldown(), (this.state.basilisk && gift) ? cooldownFast[1] : cooldownNormal[1]);
   }
 
   printCooldown = () => {
@@ -736,15 +775,15 @@ class App extends Component {
     }
   }
 
-  basiliskSoundSet = () => {
+  soundEffectSet = (sound) => {
     this.setState({
-      basiliskSound: BasiliskSound
+      soundEffect: SoundList[sound]
     })
   }
 
-  basiliskSoundEnd = () => {
+  soundEffectEnd = () => {
     this.setState({
-      basiliskSound: null
+      soundEffect: null
     })
   }
 
@@ -753,7 +792,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <div className={(this.state.subState) ? 'fadeIn' : 'fadeOut'}>
-            <Sub username={this.state.user} message={this.state.message} subType={this.state.subType}/>
+            <Sub username={this.state.user} message={this.state.message} subType={this.state.subType} />
           </div>
           <div className={(this.state.cheerState) ? 'fadeIn' : 'fadeOut'}>
             <Cheer username={this.state.user} message={this.state.message} bits={this.state.bits} cheerImg={this.state.cheerImg} />
@@ -769,10 +808,10 @@ class App extends Component {
           onEnded={this.soundEnd}
         />
         <AudioPlayer
-          src={this.state.basiliskSound}
+          src={this.state.soundEffect}
           title={""}
           autoPlay
-          onEnded={this.basiliskSoundEnd}
+          onEnded={this.soundEffectEnd}
         />
       </div>
     );
