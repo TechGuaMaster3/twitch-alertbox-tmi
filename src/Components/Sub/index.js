@@ -3,11 +3,13 @@ import Converter from '../../model/Converter';
 import parse from 'html-react-parser';
 import './Sub.css';
 import subImg from '../../img/sub/sub.gif'
+import subImgT3 from '../../img/sub/sub_t3.gif'
 
 class Sub extends Component {
 
     render() {
-        const { username, message} = this.props;
+        const { username, message, subType } = this.props;
+        const imgResult = (subType)? subImgT3 : subImg ;
         return (
             <div>
                 <div id="widget" className="widget-AlertBox" data-layout="side">
@@ -15,7 +17,7 @@ class Sub extends Component {
                         <div id="particles" />
                         <div id="wrap">
                             <div id="alert-image-wrap">
-                                <div id="alert-image" style={{ backgroundImage: 'url("' + subImg + '")' }}><img style={{ height: '1px', opacity: 0, width: '1px' }} src={subImg} /></div>
+                                <div id="alert-image" style={{ backgroundImage: 'url("' + imgResult + '")' }}><img style={{ height: '1px', opacity: 0, width: '1px' }} src={imgResult} /></div>
                             </div>
                             <div id="alert-text-wrap">
                                 <div id="alert-text">

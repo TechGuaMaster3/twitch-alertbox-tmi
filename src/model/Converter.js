@@ -87,7 +87,7 @@ class Converter {
     }
 
     formatTwitchEmotes = (text, emotes) => {
-        let link = 'http://static-cdn.jtvnw.net/emoticons/v1/';
+        let link = 'http://static-cdn.jtvnw.net/emoticons/v2/';
         var splitText = Array.from(text);
         for (var i in emotes) {
             var e = emotes[i];
@@ -99,7 +99,7 @@ class Converter {
                     var length = mote[1] - mote[0];
                     var empty = Array.apply(null, new Array(length + 1)).map(function () { return ''; });
                     splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[1] + 1, splitText.length));
-                    splitText.splice(mote[0], 1, `<img class="emoticon" src="${link}${i}/3.0">`);
+                    splitText.splice(mote[0], 1, `<img class="emoticon" src="${link}${i}/default/dark/3.0">`);
                 };
             };
         }
