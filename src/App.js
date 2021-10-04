@@ -14,12 +14,12 @@ import SoundList from './SoundList';
 const io = require("socket.io-client");
 
 const gifCount = 40;
-const bgifCount = 21;
+const bgifCount = 22;
 const channelList = ['tetristhegrandmaster3', 'tgm3backend'];
 const cooldownNormal = [10000, 5000];
 //TODO
-const cooldownFast = [10000, 5000];
-const updateTimeLog = "2021/09/22 ver3";
+const cooldownFast = [4000, 2000];
+const updateTimeLog = "2021/10/01 ver1";
 
 var queue = [];
 var current = null;
@@ -39,15 +39,16 @@ class App extends Component {
     emotes: null,
     cheerImg: 0,
     donationAmount: "",
+    subGift: false,
     basilisk: false,
+    giftBoost: false,
     kero: false,
     mao: false,
     soundEffect: null,
     tmiUser: false,
     recallType: "",
     recallUser: "",
-    recallStatus: false,
-    subGift: false
+    recallStatus: false
   }
 
   componentDidMount() {
@@ -169,8 +170,8 @@ class App extends Component {
             cheerImg: 0,
             donation: "",
             //todo
-            // subGift: (eventData.message[0].sub_type == "subgift")
-            subGift: false
+            subGift: (eventData.message[0].sub_type == "subgift")
+            // subGift: false
           }
           queue.push(data);
           if (!this.state.running) {
@@ -247,7 +248,7 @@ class App extends Component {
           emotes: userstate.emotes,
           cheerImg: 0,
           donation: "",
-          subType: true
+          subTier: true
         }
         queue.push(data);
         if (!this.state.running) {
@@ -303,7 +304,7 @@ class App extends Component {
           emotes: userstate.emotes,
           cheerImg: 0,
           donation: "",
-          subType: true
+          subTier: true
         }
         queue.push(data);
         if (!this.state.running) {
@@ -383,9 +384,9 @@ class App extends Component {
           emotes: userstate.emotes,
           cheerImg: 0,
           donation: "",
-          subType: true,
+          subTier: true,
           //TODO
-          subGift: false
+          subGift: true
         }
         queue.push(data);
         if (!this.state.running) {
@@ -424,22 +425,27 @@ class App extends Component {
       var playList = [];
       var result;
       var i = "";
+      var gift = false;
       var data = {}
       var isMod = ((context.username == 'tetristhegrandmaster3' || context.username == 'zatd39' || context.mod) && context.username != 'nightbot');
-      if (isMod && msg == "!戴口罩勤洗手要消毒") {
-        // playList.push(SubSound);
-        i = (context.username == 'tetristhegrandmaster3') ? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
-        playList.push(this.getApiUrl(i));
+      if (isMod && msg.split(' ')[0].toLowerCase() == "!戴口罩勤洗手要消毒") {
+        gift = (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'g');
+        if (!gift) {
+          i = (context.username == 'tetristhegrandmaster3') ? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
+          playList.push(this.getApiUrl(i));
+        }       
         data = {
           type: 's',
-          user: (context.username == 'zatd39') ? "技正" : context["display-name"],
+          user: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'g') ? "我就送" : "技正",
           messageAll: Converter.formatTwitchEmotes(i, context.emotes),
           message: [],
           soundUrl: playList,
           cheer: 0,
           emotes: context.emotes,
           cheerImg: 0,
-          donation: ""
+          donation: "",
+          //TODO
+          subGift: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'g')
         }
         queue.push(data);
         if (!this.state.running) {
@@ -450,20 +456,25 @@ class App extends Component {
         }
       }
 
-      if (isMod && msg == "!尊爵不凡") {
-        i = "我郭";
-        playList.push(this.getApiUrl(i));
+      if (isMod && msg.split(' ')[0].toLowerCase() == "!尊爵不凡") {
+        gift = (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'g');
+        if (!gift) {
+          i = "我郭";
+          playList.push(this.getApiUrl(i));
+        }
         data = {
           type: 's',
-          user: (context.username == 'zatd39') ? "技正" : context["display-name"],
-          messageAll: Converter.formatTwitchEmotes(i, context.emotes),
+          user: (gift) ? "我就送" : "技正",
+          messageAll: i,
           message: [],
           soundUrl: playList,
           cheer: 0,
           emotes: context.emotes,
           cheerImg: 0,
           donation: "",
-          subType: true
+          subTier: true,
+          //TODO
+          subGift: (gift)
         }
         queue.push(data);
         if (!this.state.running) {
@@ -476,8 +487,8 @@ class App extends Component {
 
       if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
         playList.push(CheerSound);
-        i = "tgm3Cheer878787 笑死";
-        playList.push(this.getApiUrl("笑死"));
+        i = "doodleCheer87878 doodleCheer8787 doodleCheer1087 doodleCheer187 doodleCheer87";
+        // playList.push(this.getApiUrl("笑死"));
         result = Converter.formatText(i, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
         data = {
           type: 'c',
@@ -503,6 +514,12 @@ class App extends Component {
           basilisk: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'on') ? true : false
         })
         console.log("Basilisk Time")
+      }
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!giftboost")) {
+        this.setState({
+          giftBoost: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'on') ? true : false
+        })
+        console.log("Sub Gift Boost")
       }
       if (isMod && (msg.split(' ')[0].toLowerCase() == "!sound")) {
         this.setState({
@@ -539,11 +556,6 @@ class App extends Component {
           })
           this.alertExec();
         }
-      }
-
-      if (isMod && this.state.tmiUser && (msg == "!2.0")) {
-        var text = "!戴口罩勤洗手要消毒 [SubTest] | !彩學好帥/!彩學很帥 [BitsTest] | !小狗 [DonateTest] | !basilisktime on/off [Basilisk Time On/Off]  | !reload2.0 [Reload AlertBox 2.0]"
-        client.say(target, text);
       }
 
       if ((msg.split(' ')[0].toLowerCase() == "!厄介mode") && (context.username == 'taikonokero')) {
@@ -622,7 +634,7 @@ class App extends Component {
             emotes: context.emotes,
             cheerImg: 0,
             donation: "",
-            subType: true,
+            subTier: true,
           }
           queue.push(data);
           if (!this.state.running) {
@@ -674,19 +686,18 @@ class App extends Component {
     current = queue.shift();
     console.log(current);
     var bsound = null;
-    if(current.type == 's'){
-      if (current.subType) {
+    if (current.type == 's') {
+      if (current.subTier) {
         //TODO
-        // bsound = (this.state.basilisk && current.subGift) ? SubT3Sound : SubT3Sound;
         bsound = (this.state.basilisk) ? SubSound : SubT3Sound;
-        current.soundUrl.unshift(bsound);
+        if (this.state.giftBoost && current.subGift)
+          bsound = SubSoundFast;
       }
       else {
         //TODO
-        bsound = (this.state.basilisk && current.subGift) ? SubSound : SubSound;
-        current.soundUrl.unshift(bsound);
+        bsound = (this.state.giftBoost && current.subGift) ? SubSoundFast : SubSound;
       }
-
+      current.soundUrl.unshift(bsound);
     }
     var sound = current.soundUrl.shift();
     var img = (this.state.basilisk) ? this.getRamdom(true) : current.cheerImg;
@@ -704,10 +715,10 @@ class App extends Component {
       emotes: current.emotes,
       cheerImg: img,
       donationAmount: current.donation,
-      subType: (current.subType) ? true : false,
+      subTier: (current.subTier) ? true : false,
       subGift: current.subGift
     })
-    setTimeout(() => this.printEnd(), (this.state.basilisk && current.subGift) ? cooldownFast[0] : cooldownNormal[0]);
+    setTimeout(() => this.printEnd(), (this.state.giftBoost && current.subGift) ? cooldownFast[0] : cooldownNormal[0]);
   }
 
   printEnd = () => {
@@ -717,7 +728,7 @@ class App extends Component {
       cheerState: false,
       donationState: false
     })
-    setTimeout(() => this.printCooldown(), (this.state.basilisk && gift) ? cooldownFast[1] : cooldownNormal[1]);
+    setTimeout(() => this.printCooldown(), (this.state.giftBoost && gift) ? cooldownFast[1] : cooldownNormal[1]);
   }
 
   printCooldown = () => {
@@ -792,7 +803,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <div className={(this.state.subState) ? 'fadeIn' : 'fadeOut'}>
-            <Sub username={this.state.user} message={this.state.message} subType={this.state.subType} />
+            <Sub username={this.state.user} message={this.state.message} subType={this.state.subTier} />
           </div>
           <div className={(this.state.cheerState) ? 'fadeIn' : 'fadeOut'}>
             <Cheer username={this.state.user} message={this.state.message} bits={this.state.bits} cheerImg={this.state.cheerImg} />
