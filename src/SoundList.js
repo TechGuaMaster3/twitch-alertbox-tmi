@@ -34,6 +34,24 @@ import objectionJ from './sound/FX/AceAttorney/objectionj.wav';
 import takethatC from './sound/FX/AceAttorney/takethatc.wav';
 import takethatE from './sound/FX/AceAttorney/takethate.wav';
 import takethatJ from './sound/FX/AceAttorney/takethatj.wav';
+//JoJo
+import caesar from './sound/FX/Jojo/caesar.mp3';
+import dai3bukan from './sound/FX/Jojo/dai3bukan.mp3';
+import goodbyejojo from './sound/FX/Jojo/goodbyejojo.mp3';
+import hell2you from './sound/FX/Jojo/hell2you.mp3';
+import konodioda from './sound/FX/Jojo/konodioda.mp3';
+import nigerundayo from './sound/FX/Jojo/nigerundayo.mp3';
+import ningenoyameruzo from './sound/FX/Jojo/ningenoyameruzo.mp3';
+import nonononono from './sound/FX/Jojo/nonononono.mp3';
+import roadroller from './sound/FX/Jojo/roadroller.mp3';
+import shinekakyoin from './sound/FX/Jojo/shinekakyoin.mp3';
+import tobecontinued from './sound/FX/Jojo/tobecontinued.mp3';
+import verynicecaesarchan from './sound/FX/Jojo/verynicecaesarchan.mp3';
+import wryyy from './sound/FX/Jojo/wryyy.mp3';
+import yareyaredaze from './sound/FX/Jojo/yareyaredaze.mp3';
+import yesiam from './sound/FX/Jojo/yesiam.mp3';
+import yesyesyes from './sound/FX/Jojo/yesyesyes.mp3';
+import zawarudo from './sound/FX/Jojo/zawarudo.mp3';
 
 export default {
     //YuGiOh
@@ -72,4 +90,22 @@ export default {
     "takethatc": takethatC,
     "takethate": takethatE,
     "takethatj": takethatJ,
+    //JoJo
+    "caesar": caesar,
+    "dai3bukan": dai3bukan,
+    "goodbyejojo": goodbyejojo,
+    "hell2you": hell2you,
+    "konodioda": konodioda,
+    "nigerundayo": nigerundayo,
+    "ningenoyameruzo": ningenoyameruzo,
+    "nonononono": nonononono,
+    "roadroller": roadroller,
+    "shinekakyoin": shinekakyoin,
+    "tobecontinued": tobecontinued,
+    "verynicecaesarchan": verynicecaesarchan,
+    "wryyy": wryyy,
+    "yareyaredaze": yareyaredaze,
+    "yesiam": yesiam,
+    "yesyesyes": yesyesyes,
+    "zawarudo": zawarudo,
 };
