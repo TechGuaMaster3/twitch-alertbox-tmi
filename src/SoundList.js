@@ -52,6 +52,9 @@ import yareyaredaze from './sound/FX/Jojo/yareyaredaze.mp3';
 import yesiam from './sound/FX/Jojo/yesiam.mp3';
 import yesyesyes from './sound/FX/Jojo/yesyesyes.mp3';
 import zawarudo from './sound/FX/Jojo/zawarudo.mp3';
+//Bonk
+import bonksd from './sound/FX/bonksd.mp3';
+import bonkhd from './sound/FX/bonkhd.mp3';
 
 export default {
     //YuGiOh
@@ -108,4 +111,7 @@ export default {
     "yesiam": yesiam,
     "yesyesyes": yesyesyes,
     "zawarudo": zawarudo,
+    //Bonk
+    "bonksd": bonksd,
+    "bonkhd": bonkhd,
 };

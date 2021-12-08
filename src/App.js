@@ -14,12 +14,12 @@ import SoundList from './SoundList';
 const io = require("socket.io-client");
 
 const gifCount = 40;
-const bgifCount = 22;
+const bgifCount = 24;
 const channelList = ['tetristhegrandmaster3', 'tgm3backend'];
 const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2021/10/01 ver1";
+const updateTimeLog = "2021/11/04 ver1";
 
 var queue = [];
 var current = null;
@@ -150,7 +150,7 @@ class App extends Component {
         }
       }
       if (eventData.for === 'twitch_account') {
-        if (eventData.type == 'resub' || eventData.type == 'subscription') {
+        if ((eventData.type == 'resub' || eventData.type == 'subscription') && eventData.message[0].sub_plan !== "3000") {
           playList = [];
           var msg = "";
           processEmotes = this.streamlabsEmotesFormatter(eventData.message[0].emotes);
