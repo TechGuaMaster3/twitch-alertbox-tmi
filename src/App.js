@@ -14,12 +14,12 @@ import SoundList from './SoundList';
 const io = require("socket.io-client");
 
 const gifCount = 40;
-const bgifCount = 24;
+const bgifCount = 25;
 const channelList = ['tetristhegrandmaster3', 'tgm3backend'];
 const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2021/11/04 ver1";
+const updateTimeLog = "2021/12/11 ver1";
 
 var queue = [];
 var current = null;
@@ -201,7 +201,8 @@ class App extends Component {
             cheer: eventData.message[0].amount,
             emotes: processEmotes,
             cheerImg: this.getRamdom(false),
-            donation: ""
+            donation: "",
+            doodle: result.doodle
           }
           queue.push(data);
           if (!this.state.running) {
@@ -433,7 +434,7 @@ class App extends Component {
         if (!gift) {
           i = (context.username == 'tetristhegrandmaster3') ? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
           playList.push(this.getApiUrl(i));
-        }       
+        }
         data = {
           type: 's',
           user: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'g') ? "我就送" : "技正",
@@ -487,7 +488,7 @@ class App extends Component {
 
       if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
         playList.push(CheerSound);
-        i = "doodleCheer87878 doodleCheer8787 doodleCheer1087 doodleCheer187 doodleCheer87";
+        i = "doodleCheer87";
         // playList.push(this.getApiUrl("笑死"));
         result = Converter.formatText(i, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
         data = {
@@ -586,7 +587,8 @@ class App extends Component {
             cheer: result.count,
             emotes: context.emotes,
             cheerImg: this.getRamdom(false),
-            donation: ""
+            donation: "",
+            doodle: result.doodle
           }
           queue.push(data);
           if (!this.state.running) {
@@ -686,6 +688,7 @@ class App extends Component {
     current = queue.shift();
     console.log(current);
     var bsound = null;
+    var displayTime = (this.state.giftBoost && current.subGift) ? cooldownFast[0] : cooldownNormal[0];
     if (current.type == 's') {
       if (current.subTier) {
         //TODO
@@ -701,6 +704,10 @@ class App extends Component {
     }
     var sound = current.soundUrl.shift();
     var img = (this.state.basilisk) ? this.getRamdom(true) : current.cheerImg;
+    if (current.doodle) {
+      img = 'd';
+      displayTime = 18500;
+    }
     var name = (current.name) ? current.name : '';
     if (this.state.kero && name.toLowerCase() == 'feline_mao') img = 'mao';
     if (this.state.mao && name.toLowerCase() == 'taikonokero') img = 'kero';
@@ -718,7 +725,7 @@ class App extends Component {
       subTier: (current.subTier) ? true : false,
       subGift: current.subGift
     })
-    setTimeout(() => this.printEnd(), (this.state.giftBoost && current.subGift) ? cooldownFast[0] : cooldownNormal[0]);
+    setTimeout(() => this.printEnd(), displayTime);
   }
 
   printEnd = () => {

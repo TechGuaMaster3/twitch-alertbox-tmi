@@ -10,6 +10,19 @@
 
 ## 版本
 
+### version 0.6.3
+- 新增 gif
+- 支援 100000 Bits
+
+### version 0.6.2
+- 新增音效
+- 新增 gif
+- sub T3 修正
+
+### version 0.6.1
+- 新增音效
+- 新增sub gift boost mode
+
 ### version 0.6.0
 - 新增音效功能
 - basilisk mode 通知加速撥放(未運作)

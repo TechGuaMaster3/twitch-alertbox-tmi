@@ -1,6 +1,6 @@
 {
   "name": "twitch-alertbox-tmi",
-  "version": "0.4.0",
+  "version": "0.6.3",
   "private": true,
   "homepage": "http://m3ntru.github.io/twitch-alertbox-tmi",
   "dependencies": {
@@ -43,5 +43,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "description": "一個因為 [StreamLab Alert Box TTS 功能故障](https://hackmd.io/@M3ntru/AlertBoxIssue)  \r 而誕生的仿製 Alert Box for 彩學台",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechGuaMaster3/twitch-alertbox-tmi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TechGuaMaster3/twitch-alertbox-tmi/issues"
   }
 }

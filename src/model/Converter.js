@@ -32,15 +32,20 @@ class Converter {
         var cheerRegex = /([0-9])\d+/g;
         var cheerList = c.match(cheerRegex);
         var cheerTotal = 0;
+        var doodle = false;
         if (cheerList) {
             cheerList.forEach(function (t) {
                 cheerTotal = cheerTotal + parseInt(t);
+                if (parseInt(t) >= 1e5) {
+                    doodle = true;
+                }
             })
         }
         var data = {
             count: cheerTotal,
             display: v,
-            message: out
+            message: out,
+            doodle
         }
         return data;
     }
@@ -66,16 +71,20 @@ class Converter {
         var c = "";
         var b = l;
         var v = u;
-        v = this.formatTwitchEmotes(v,z);
+        v = this.formatTwitchEmotes(v, z);
         g.forEach((function (t) {
             var color, height;
+            var temp1 = t[2].toLowerCase();
             var i = parseInt(t[3]);
-            if (parseInt(t[3]) >= 1e4) { color = "red"; height = 10000; }
+            if (parseInt(t[3]) >= 1e5) {
+                if (temp1 === 'cheer' || temp1 === 'doodlecheer') { color = "#f3a71a"; height = 100000; }
+                else { color = "red"; height = 10000; }
+            }
+            if (parseInt(t[3]) >= 1e4 && parseInt(t[3]) <= 99999) { color = "red"; height = 10000; }
             if (parseInt(t[3]) >= 5e3 && parseInt(t[3]) <= 9999) { color = "blue"; height = 5000; }
             if (parseInt(t[3]) >= 1e3 && parseInt(t[3]) <= 4999) { color = "#2dfdbe"; height = 1000; }
             if (parseInt(t[3]) >= 100 && parseInt(t[3]) <= 999) { color = "#be61ff"; height = 100; }
             if (parseInt(t[3]) >= 1 && parseInt(t[3]) <= 99) { color = "grey"; height = 1; }
-            var temp1 = t[2].toLowerCase();
             var temp2 = cheerJson[temp1][height];
             v = v.replace(t[0], "<img src='" + temp2 + "' /><font color='" + color + "'>" + t[3] + "</font>");
             b = b.replace(t[0], "");
