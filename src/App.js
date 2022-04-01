@@ -19,10 +19,26 @@ const channelList = ['tetristhegrandmaster3', 'tgm3backend'];
 const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2021/12/11 ver1";
+const updateTimeLog = "2022/04/01 ver1";
+const ln = ["&tl=ch", "&tl=en", "&tl=tw", "&tl=jp", "&tl=fr", "&tl=ko"];
+const lnCount = 6;
 
 var queue = [];
 var current = null;
+
+const getRamdomLn = (enable, count) => {
+  if(!enable) return 0;
+  var a = 0, j;
+  var ran = Math.random() * 1
+  for (j = 1; j <= count; j++) {
+    if (ran < j * (1 / count)) {
+      a = j - 1;
+      break;
+    }
+  }
+  console.log(a);
+  return a;
+}
 
 class App extends Component {
   state = {
@@ -48,7 +64,8 @@ class App extends Component {
     tmiUser: false,
     recallType: "",
     recallUser: "",
-    recallStatus: false
+    recallStatus: false,
+    lnStatus: false,
   }
 
   componentDidMount() {
@@ -56,7 +73,7 @@ class App extends Component {
   }
 
   getApiUrl = (t) => {
-    var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
+    var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(ln[getRamdomLn(this.state.lnStatus, lnCount)]));
     return result;
   }
 
@@ -126,8 +143,9 @@ class App extends Component {
         result = Converter.splitTextV1(eventData.message[0].message, [".", "!", "?", ":", ";", ",", " "], 90, "", eventData.message[0].message);
         playList = [];
         playList.push(CheerSound);
+        const lnResult = ln[getRamdomLn(this.state.lnStatus, lnCount)];
         result.message.forEach(function (t) {
-          var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
+          var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(lnResult));
           playList.push(result);
         })
         data = {
@@ -187,8 +205,9 @@ class App extends Component {
           // var bit = result.count;
           playList = [];
           playList.push(CheerSound);
+          const lnResult = ln[getRamdomLn(this.state.lnStatus, lnCount)];
           result.message.forEach(function (t) {
-            var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
+            var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(lnResult));
             playList.push(result);
           })
           data = {
@@ -346,7 +365,7 @@ class App extends Component {
     //   var playList = [];
     //   playList.push(CheerSound);
     //   result.message.forEach(function (t) {
-    //     var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
+    //     var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(ln[getRamdomLn(this.state.lnStatus, lnCount)]));
     //     playList.push(result);
     //   })
     //   var data = {
@@ -516,6 +535,12 @@ class App extends Component {
         })
         console.log("Basilisk Time")
       }
+      if (isMod && (msg.split(' ')[0].toLowerCase() == "!lang")) {
+        this.setState({
+          lnStatus: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'on') ? true : false
+        })
+        console.log("lnStatus Time")
+      }
       if (isMod && (msg.split(' ')[0].toLowerCase() == "!giftboost")) {
         this.setState({
           giftBoost: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'on') ? true : false
@@ -573,9 +598,10 @@ class App extends Component {
       if (isMod && this.state.recallStatus) {
         if (this.state.recallType == "c") {
           playList.push(CheerSound);
+          const lnResult = ln[getRamdomLn(this.state.lnStatus, lnCount)];
           result = Converter.formatText(msg, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
           result.message.forEach(function (t) {
-            var re = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat('&tl=cn'));
+            var re = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(lnResult));
             playList.push(re);
           })
           data = {

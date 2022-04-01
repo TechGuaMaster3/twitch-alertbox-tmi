@@ -10,6 +10,9 @@
 
 ## 版本
 
+### version 0.6.4 beta
+- AF
+
 ### version 0.6.3
 - 新增 gif
 - 支援 100000 Bits
