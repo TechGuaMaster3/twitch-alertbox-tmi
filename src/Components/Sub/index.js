@@ -21,14 +21,14 @@ class Sub extends Component {
                             </div>
                             <div id="alert-text-wrap">
                                 <div id="alert-text">
-                                    <div id="alert-message" style={{ fontSize: '26px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"', fontWeight: 800 }}>
+                                    <div id="alert-message" style={{ fontSize: '38px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"', fontWeight: 800 }}>
                                         你 ♂&nbsp;
                             <span data-token="name" style={{ color: 'rgb(119, 207, 245)', position: 'relative' }}><span><span className="animated-letter">
                                             {username}
                                         </span></span></span>
                                 &nbsp;♂ 爸
                                 </div>
-                                    <div id="alert-user-message" style={{ fontWeight: 800, fontSize: '26px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"' }}>
+                                    <div id="alert-user-message" style={{ fontWeight: 800, fontSize: '38px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"' }}>
                                         {parse(message)}
                                     </div>
                                 </div>

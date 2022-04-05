@@ -17,7 +17,7 @@ class Donation extends Component {
                         </div>
                         <div id="alert-text-wrap">
                             <div id="alert-text">
-                            <div id="alert-message" style={{fontSize: '26px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"', fontWeight: 800}}>
+                            <div id="alert-message" style={{fontSize: '36px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"', fontWeight: 800}}>
                                 <span data-token="name" style={{color: 'rgb(252, 255, 125)', position: 'relative'}}><span><span className="animated-letter">
                                     {username}
                                 </span></span></span>
@@ -27,7 +27,7 @@ class Donation extends Component {
                                 </span></span></span>
                                     ] 
                                 </div>
-                                <div id="alert-user-message" style={{fontWeight: 700, fontSize: '28px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"'}}>
+                                <div id="alert-user-message" style={{fontWeight: 700, fontSize: '40px', color: 'rgb(255, 255, 255)', fontFamily: '"Josefin Sans"'}}>
                                     {message}
                                 </div>
                             </div>

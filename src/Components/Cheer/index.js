@@ -18,7 +18,7 @@ class Cheer extends Component {
                             </div>
                             <div id="alert-text-wrap">
                                 <div id="alert-text">
-                                    <div id="alert-message" style={{ fontSize: '24px', color: 'rgb(255, 255, 255)', fontFamily: '"Open Sans"', fontWeight: 600 }}>
+                                    <div id="alert-message" style={{ fontSize: '34px', color: 'rgb(255, 255, 255)', fontFamily: '"Open Sans"', fontWeight: 600 }}>
                                         <span data-token="name" style={{ color: 'rgb(250, 148, 90)', position: 'relative' }}><span><span className="animated-letter None">
                                             {username}
                                         </span></span></span>
@@ -27,7 +27,7 @@ class Cheer extends Component {
                                             {bits}
                                         </span></span></span>
                                                 粒然後說：</div>
-                                    <div id="alert-user-message" style={{ fontWeight: 700, fontSize: '24px', color: 'rgb(255, 255, 255)', fontFamily: '"Open Sans"' }}>
+                                    <div id="alert-user-message" style={{ fontWeight: 700, fontSize: '34px', color: 'rgb(255, 255, 255)', fontFamily: '"Open Sans"' }}>
                                         {parse(message)}
                                     </div>
                                 </div>

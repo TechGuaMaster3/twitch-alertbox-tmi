@@ -19,7 +19,7 @@ const channelList = ['tetristhegrandmaster3', 'tgm3backend'];
 const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2022/04/01 ver1";
+const updateTimeLog = "2022/04/05 ver1";
 const ln = ["&tl=ch", "&tl=en", "&tl=tw", "&tl=jp", "&tl=fr", "&tl=ko"];
 const lnCount = 6;
 
@@ -38,6 +38,11 @@ const getRamdomLn = (enable, count) => {
   }
   console.log(a);
   return a;
+}
+
+const getApiUrl = (t,r) => {
+  var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(ln[getRamdomLn(r, lnCount)]));
+  return result;
 }
 
 class App extends Component {
@@ -70,11 +75,6 @@ class App extends Component {
 
   componentDidMount() {
     this.initTmi()
-  }
-
-  getApiUrl = (t) => {
-    var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(ln[getRamdomLn(this.state.lnStatus, lnCount)]));
-    return result;
   }
 
   getRamdom = (type) => {
@@ -143,9 +143,9 @@ class App extends Component {
         result = Converter.splitTextV1(eventData.message[0].message, [".", "!", "?", ":", ";", ",", " "], 90, "", eventData.message[0].message);
         playList = [];
         playList.push(CheerSound);
-        const lnResult = ln[getRamdomLn(this.state.lnStatus, lnCount)];
+        const r = this.state.lnStatus;
         result.message.forEach(function (t) {
-          var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(lnResult));
+          var result = getApiUrl(t, r);
           playList.push(result);
         })
         data = {
@@ -174,7 +174,7 @@ class App extends Component {
           processEmotes = this.streamlabsEmotesFormatter(eventData.message[0].emotes);
           // playList.push(SubSound);
           if (eventData.message[0].message != null && eventData.message[0].message != "") {
-            playList.push(this.getApiUrl(eventData.message[0].message));
+            playList.push(getApiUrl(eventData.message[0].message, this.state.lnStatus));
             msg = Converter.formatTwitchEmotes(eventData.message[0].message, processEmotes);
           }
           data = {
@@ -205,9 +205,9 @@ class App extends Component {
           // var bit = result.count;
           playList = [];
           playList.push(CheerSound);
-          const lnResult = ln[getRamdomLn(this.state.lnStatus, lnCount)];
+          const r = this.state.lnStatus;
           result.message.forEach(function (t) {
-            var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(lnResult));
+            var result = getApiUrl(t, r);
             playList.push(result);
           })
           data = {
@@ -255,7 +255,7 @@ class App extends Component {
         var playList = [];
         var msg = "";
         if (message != null && message != "") {
-          playList.push(this.getApiUrl(message));
+          playList.push(getApiUrl(message, this.state.lnStatus));
           msg = Converter.formatTwitchEmotes(message, userstate.emotes);
         }
         var data = {
@@ -282,7 +282,7 @@ class App extends Component {
       // var msg = "";
       // playList.push(SubSound);
       // if (message != null) {
-      //   playList.push(this.getApiUrl(message));
+      //   playList.push(getApiUrl(message, this.state.lnStatus));
       //   msg = Converter.formatTwitchEmotes(message, userstate.emotes);
       // }
       // var data = {
@@ -311,7 +311,7 @@ class App extends Component {
         var playList = [];
         var msg = "";
         if (message != null && message != "") {
-          playList.push(this.getApiUrl(message));
+          playList.push(getApiUrl(message, this.state.lnStatus));
           msg = Converter.formatTwitchEmotes(message, userstate.emotes);
         }
         var data = {
@@ -338,7 +338,7 @@ class App extends Component {
       // var msg = "";
       // playList.push(SubSound);
       // if (message != null && message != "") {
-      //   playList.push(this.getApiUrl(message));
+      //   playList.push(getApiUrl, this.state.lnStatus);
       //   msg = Converter.formatTwitchEmotes(message, userstate.emotes);
       // }
       // var data = {
@@ -364,8 +364,9 @@ class App extends Component {
     //   var bit = result.count;
     //   var playList = [];
     //   playList.push(CheerSound);
+    //   const r = this.state.lnStatus;
     //   result.message.forEach(function (t) {
-    //     var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(ln[getRamdomLn(this.state.lnStatus, lnCount)]));
+    //     var result = getApiUrl(t, r);
     //     playList.push(result);
     //   })
     //   var data = {
@@ -452,7 +453,7 @@ class App extends Component {
         gift = (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'g');
         if (!gift) {
           i = (context.username == 'tetristhegrandmaster3') ? "戴口罩，勤洗手，要消毒，要洗澡" : "戴口罩，勤洗手，要消毒";
-          playList.push(this.getApiUrl(i));
+          playList.push(getApiUrl(i, this.state.lnStatus));
         }
         data = {
           type: 's',
@@ -480,7 +481,7 @@ class App extends Component {
         gift = (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'g');
         if (!gift) {
           i = "我郭";
-          playList.push(this.getApiUrl(i));
+          playList.push(getApiUrl(i, this.state.lnStatus));
         }
         data = {
           type: 's',
@@ -507,12 +508,12 @@ class App extends Component {
 
       if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
         playList.push(CheerSound);
-        i = "doodleCheer87";
-        // playList.push(this.getApiUrl("笑死"));
+        i = "doodleCheer8787 doodleCheer8787";
+        // playList.push(getApiUrl("笑死", this.state.lnStatus));
         result = Converter.formatText(i, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
         data = {
           type: 'c',
-          user: '皮皮船',
+          user: '雙渦輪師匠',
           messageAll: result.display,
           message: result.message,
           soundUrl: playList,
@@ -563,7 +564,7 @@ class App extends Component {
       if (isMod && (msg == "!小狗><")) {
         playList.push(CheerSound);
         i = "冥白了";
-        playList.push(this.getApiUrl(i));
+        playList.push(getApiUrl(i, this.state.lnStatus));
         data = {
           type: 'd',
           user: 'beatmania IIDX ULTIMATE MOBILE',
@@ -598,10 +599,10 @@ class App extends Component {
       if (isMod && this.state.recallStatus) {
         if (this.state.recallType == "c") {
           playList.push(CheerSound);
-          const lnResult = ln[getRamdomLn(this.state.lnStatus, lnCount)];
+          const r = this.state.lnStatus;
           result = Converter.formatText(msg, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
           result.message.forEach(function (t) {
-            var re = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(lnResult));
+            var re = getApiUrl(t, r);
             playList.push(re);
           })
           data = {
@@ -627,7 +628,7 @@ class App extends Component {
         if (this.state.recallType == "s") {
           // playList.push(SubSound);
           if (msg != "0") {
-            playList.push(this.getApiUrl(msg));
+            playList.push(getApiUrl(msg, this.state.lnStatus));
           }
           data = {
             type: 's',
@@ -650,7 +651,7 @@ class App extends Component {
         }
         if (this.state.recallType == "st") {
           if (msg != "0") {
-            playList.push(this.getApiUrl(msg));
+            playList.push(getApiUrl(msg, this.state.lnStatus));
           }
           data = {
             type: 's',

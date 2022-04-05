@@ -10,6 +10,10 @@
 
 ## 版本
 
+### version 0.6.5
+- lang 功能新增
+- 字體大˙小修改
+
 ### version 0.6.4 beta
 - AF
 
