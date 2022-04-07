@@ -20,24 +20,28 @@ const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
 const updateTimeLog = "2022/04/05 ver1";
-const ln = ["&tl=ch", "&tl=en", "&tl=tw", "&tl=jp", "&tl=fr", "&tl=ko"];
+const ln = ["ch", "en", "tw", "jp", "fr", "ko"];
 const lnCount = 6;
 
 var queue = [];
 var current = null;
 
-const getRamdomLn = (enable, count) => {
-  if(!enable) return 0;
-  var a = 0, j;
-  var ran = Math.random() * 1
-  for (j = 1; j <= count; j++) {
-    if (ran < j * (1 / count)) {
-      a = j - 1;
-      break;
+const getRamdomLn = (lang) => {
+  if(lang === "random") {
+    var a = 0, j;
+    var ran = Math.random() * 1
+    for (j = 1; j <= lnCount; j++) {
+      if (ran < j * (1 / lnCount)) {
+        a = j - 1;
+        break;
+      }
     }
+    console.log(a);
+    return ln[a];
   }
-  console.log(a);
-  return a;
+  else {
+    return lang;
+  }
 }
 
 const getApiUrl = (t,r) => {
@@ -70,11 +74,17 @@ class App extends Component {
     recallType: "",
     recallUser: "",
     recallStatus: false,
-    lnStatus: false,
+    lnStatus: "ch",
   }
 
   componentDidMount() {
-    this.initTmi()
+    this.initTmi();
+    this.getSetting();
+  }
+
+  getApiUrl = (t) => {
+    var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat("&tl=" + getRamdomLn(this.state.lnStatus)));
+    return result;
   }
 
   getRamdom = (type) => {
@@ -108,6 +118,22 @@ class App extends Component {
     return result;
   }
 
+  getSetting = async () => {
+    await fetch('https://m3ntru-tts.herokuapp.com/api/alert/tetristhegrandmaster3')
+      .then(response=>{
+        return response.json();
+      })
+      .then(data=>{
+        console.log(data);
+        this.setState({
+          basilisk: data.basilisk,
+          giftBoost: data.gift,
+          lnStatus: data.lang
+        });
+      })
+      .catch(error => console.error(error))
+  }
+
   initTmi = () => {
     const paramsToken = new URLSearchParams(window.location.search).get('token');
     const paramsUser = new URLSearchParams(window.location.search).get('user');
@@ -123,7 +149,6 @@ class App extends Component {
       })
     }
     var token = paramsToken;
-
 
     //Connect to socket
     const streamlabs = io(`https://sockets.streamlabs.com?token=${token}`, { transports: ['websocket'] });
@@ -143,9 +168,9 @@ class App extends Component {
         result = Converter.splitTextV1(eventData.message[0].message, [".", "!", "?", ":", ";", ",", " "], 90, "", eventData.message[0].message);
         playList = [];
         playList.push(CheerSound);
-        const r = this.state.lnStatus;
+        const lnResult = "&tl=" + getRamdomLn(this.state.lnStatus);
         result.message.forEach(function (t) {
-          var result = getApiUrl(t, r);
+          var result = getApiUrl(lnResult);
           playList.push(result);
         })
         data = {
@@ -205,9 +230,9 @@ class App extends Component {
           // var bit = result.count;
           playList = [];
           playList.push(CheerSound);
-          const r = this.state.lnStatus;
+          const lnResult = "&tl=" + getRamdomLn(this.state.lnStatus);
           result.message.forEach(function (t) {
-            var result = getApiUrl(t, r);
+            var result = getApiUrl(lnResult);
             playList.push(result);
           })
           data = {
@@ -366,7 +391,7 @@ class App extends Component {
     //   playList.push(CheerSound);
     //   const r = this.state.lnStatus;
     //   result.message.forEach(function (t) {
-    //     var result = getApiUrl(t, r);
+    //     var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat("&tl=" + getRamdomLn(this.state.lnStatus)));
     //     playList.push(result);
     //   })
     //   var data = {
@@ -538,9 +563,9 @@ class App extends Component {
       }
       if (isMod && (msg.split(' ')[0].toLowerCase() == "!lang")) {
         this.setState({
-          lnStatus: (msg.split(' ')[1] && msg.split(' ')[1].toLowerCase() == 'on') ? true : false
+          lnStatus: (msg.split(' ')[1]) ? msg.split(' ')[1] : 'ch'
         })
-        console.log("lnStatus Time")
+        console.log("change lang")
       }
       if (isMod && (msg.split(' ')[0].toLowerCase() == "!giftboost")) {
         this.setState({
@@ -599,10 +624,10 @@ class App extends Component {
       if (isMod && this.state.recallStatus) {
         if (this.state.recallType == "c") {
           playList.push(CheerSound);
-          const r = this.state.lnStatus;
+          const lnResult = "&tl=" + getRamdomLn(this.state.lnStatus);
           result = Converter.formatText(msg, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
           result.message.forEach(function (t) {
-            var re = getApiUrl(t, r);
+            var re = getApiUrl(lnResult);
             playList.push(re);
           })
           data = {

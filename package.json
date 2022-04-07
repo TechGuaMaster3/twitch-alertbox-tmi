@@ -1,6 +1,6 @@
 {
   "name": "twitch-alertbox-tmi",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "private": true,
   "homepage": "http://m3ntru.github.io/twitch-alertbox-tmi",
   "dependencies": {
