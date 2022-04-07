@@ -10,6 +10,9 @@
 
 ## 版本
 
+### version 0.7.1
+- bug fixed
+
 ### version 0.7.0
 - lang 功能修改
 - 新增記錄功能

@@ -44,8 +44,8 @@ const getRamdomLn = (lang) => {
   }
 }
 
-const getApiUrl = (t,r) => {
-  var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat(ln[getRamdomLn(r, lnCount)]));
+const getApiUrl = (text,lang) => {
+  var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(text).concat("&tl=" + getRamdomLn(lang)));
   return result;
 }
 
@@ -80,11 +80,6 @@ class App extends Component {
   componentDidMount() {
     this.initTmi();
     this.getSetting();
-  }
-
-  getApiUrl = (t) => {
-    var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat("&tl=" + getRamdomLn(this.state.lnStatus)));
-    return result;
   }
 
   getRamdom = (type) => {
@@ -168,9 +163,9 @@ class App extends Component {
         result = Converter.splitTextV1(eventData.message[0].message, [".", "!", "?", ":", ";", ",", " "], 90, "", eventData.message[0].message);
         playList = [];
         playList.push(CheerSound);
-        const lnResult = "&tl=" + getRamdomLn(this.state.lnStatus);
+        const lnResult = this.state.lnStatus;
         result.message.forEach(function (t) {
-          var result = getApiUrl(lnResult);
+          var result = getApiUrl(t, lnResult);
           playList.push(result);
         })
         data = {
@@ -230,9 +225,9 @@ class App extends Component {
           // var bit = result.count;
           playList = [];
           playList.push(CheerSound);
-          const lnResult = "&tl=" + getRamdomLn(this.state.lnStatus);
+          const lnResult = this.state.lnStatus;
           result.message.forEach(function (t) {
-            var result = getApiUrl(lnResult);
+            var result = getApiUrl(t, lnResult);;
             playList.push(result);
           })
           data = {
@@ -624,10 +619,10 @@ class App extends Component {
       if (isMod && this.state.recallStatus) {
         if (this.state.recallType == "c") {
           playList.push(CheerSound);
-          const lnResult = "&tl=" + getRamdomLn(this.state.lnStatus);
           result = Converter.formatText(msg, [".", "!", "?", ":", ";", ",", " "], 90, context.emotes);
+          const lnResult = this.state.lnStatus;
           result.message.forEach(function (t) {
-            var re = getApiUrl(lnResult);
+            var re = getApiUrl(t, lnResult);
             playList.push(re);
           })
           data = {
