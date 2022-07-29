@@ -8,6 +8,7 @@ import AudioPlayer from "react-audio-player";
 import SubSound from "./sound/sub.mp3";
 import SubT3Sound from "./sound/sub_t3.mp3";
 import SubSoundFast from "./sound/sub_fast.mp3";
+import SubSoundRare from "./sound/sub_rare.mp3";
 import CheerSound from "./sound/cheer.mp3";
 import tmi from "tmi.js";
 import SoundList from "./SoundList";
@@ -19,7 +20,7 @@ const channelList = ["tetristhegrandmaster3", "tgm3backend"];
 const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2022/04/05 ver1";
+const updateTimeLog = "2022/06/12 ver1";
 const ln = ["ch", "en", "tw", "jp", "fr", "ko"];
 const lnCount = 6;
 
@@ -84,7 +85,7 @@ class App extends Component {
     this.getSetting();
   }
 
-  getRamdom = (type) => {
+  getImgRandom = (type) => {
     var i = type ? bgifCount : gifCount;
     var j,
       ran = Math.random() * 10000;
@@ -100,6 +101,11 @@ class App extends Component {
     if (type && c == 8192) randomCheerImg = "mao";
     if (type && c == 8191) randomCheerImg = "kero";
     return randomCheerImg;
+  };
+
+  getSoundRandom = (type) => {
+    var c = Math.floor(Math.random() * 100) + 1;
+    return c > 97;
   };
 
   streamlabsEmotesFormatter = (text) => {
@@ -276,7 +282,7 @@ class App extends Component {
             soundUrl: playList,
             cheer: eventData.message[0].amount,
             emotes: processEmotes,
-            cheerImg: this.getRamdom(false),
+            cheerImg: this.getImgRandom(false),
             donation: "",
             doodle: result.doodle,
           };
@@ -711,7 +717,7 @@ class App extends Component {
             soundUrl: playList,
             cheer: result.count,
             emotes: context.emotes,
-            cheerImg: this.getRamdom(false),
+            cheerImg: this.getImgRandom(false),
             donation: "",
             doodle: result.doodle,
           };
@@ -844,10 +850,11 @@ class App extends Component {
         bsound =
           this.state.giftBoost && current.subGift ? SubSoundFast : SubSound;
       }
+      if (this.getSoundRandom()) bsound = SubSoundRare;
       current.soundUrl.unshift(bsound);
     }
     var sound = current.soundUrl.shift();
-    var img = this.state.basilisk ? this.getRamdom(true) : current.cheerImg;
+    var img = this.state.basilisk ? this.getImgRandom(true) : current.cheerImg;
     if (current.doodle) {
       img = "d";
       displayTime = 18500;
