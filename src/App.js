@@ -9,6 +9,7 @@ import SubSound from "./sound/sub.mp3";
 import SubT3Sound from "./sound/sub_t3.mp3";
 import SubSoundFast from "./sound/sub_fast.mp3";
 import SubSoundRare from "./sound/sub_rare.mp3";
+import SubSoundSSRare from "./sound/sub_super_rare.mp3";
 import CheerSound from "./sound/cheer.mp3";
 import tmi from "tmi.js";
 import SoundList from "./SoundList";
@@ -20,7 +21,7 @@ const channelList = ["tetristhegrandmaster3", "tgm3backend"];
 const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2022/06/12 ver1";
+const updateTimeLog = "2022/08/04 ver1";
 const ln = ["ch", "en", "tw", "jp", "fr", "ko"];
 const lnCount = 6;
 
@@ -45,7 +46,7 @@ const getRamdomLn = (lang) => {
   }
 };
 
-const getApiUrl = (text, lang) => {
+const getTTSUrl = (text, lang) => {
   var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(
     encodeURIComponent(text).concat("&tl=" + getRamdomLn(lang))
   );
@@ -78,11 +79,12 @@ class App extends Component {
     recallUser: "",
     recallStatus: false,
     lnStatus: "ch",
+    source: false,
   };
 
   componentDidMount() {
-    this.initTmi();
     this.getSetting();
+    this.initTmi();
   }
 
   getImgRandom = (type) => {
@@ -104,8 +106,10 @@ class App extends Component {
   };
 
   getSoundRandom = (type) => {
-    var c = Math.floor(Math.random() * 100) + 1;
-    return c > 97;
+    var c = Math.floor(Math.random() * 10000) + 1;
+    if(c>9950) return 'ur';
+    if(c>9650) return 'ssr';
+    return 'n'; 
   };
 
   streamlabsEmotesFormatter = (text) => {
@@ -135,6 +139,7 @@ class App extends Component {
           basilisk: data.basilisk,
           giftBoost: data.gift,
           lnStatus: data.lang,
+          source: data.source,
         });
       })
       .catch((error) => console.error(error));
@@ -188,7 +193,7 @@ class App extends Component {
         playList.push(CheerSound);
         const lnResult = this.state.lnStatus;
         result.message.forEach(function (t) {
-          var result = getApiUrl(t, lnResult);
+          var result = getTTSUrl(t, lnResult);
           playList.push(result);
         });
         data = {
@@ -212,7 +217,7 @@ class App extends Component {
       }
       if (eventData.for === "twitch_account") {
         if (
-          (eventData.type == "resub" || eventData.type == "subscription") &&
+          !this.state.source && (eventData.type == "resub" || eventData.type == "subscription") &&
           eventData.message[0].sub_plan !== "3000"
         ) {
           playList = [];
@@ -225,9 +230,22 @@ class App extends Component {
             eventData.message[0].message != null &&
             eventData.message[0].message != ""
           ) {
-            playList.push(
-              getApiUrl(eventData.message[0].message, this.state.lnStatus)
+            
+            result = Converter.splitTextV1(
+              eventData.message[0].message,
+              [".", "!", "?", ":", ";", ",", " "],
+              90,
+              "",
+              eventData.message[0].message
             );
+            playList = [];
+            playList.push(CheerSound);
+            const lnResult = this.state.lnStatus;
+            result.message.forEach(function (t) {
+              var result = getTTSUrl(t, lnResult);
+              playList.push(result);
+            });
+
             msg = Converter.formatTwitchEmotes(
               eventData.message[0].message,
               processEmotes
@@ -255,7 +273,8 @@ class App extends Component {
             this.alertExec();
           }
         }
-        if (eventData.type == "bits") {
+        if (!this.state.source && eventData.type == "bits") {
+          console.log(eventData.message[0]);
           processEmotes = this.streamlabsEmotesFormatter(
             eventData.message[0].emotes
           );
@@ -270,8 +289,8 @@ class App extends Component {
           playList.push(CheerSound);
           const lnResult = this.state.lnStatus;
           result.message.forEach(function (t) {
-            var result = getApiUrl(t, lnResult);
-            playList.push(result);
+            let sResult = getTTSUrl(t, lnResult);
+            playList.push(sResult);
           });
           data = {
             type: "c",
@@ -317,13 +336,23 @@ class App extends Component {
         // console.log(method);
         // console.log(userstate);
         if (method.plan == "3000") {
-          var playList = [];
-          var msg = "";
+          let playList = [];
+          let msg = "";
           if (message != null && message != "") {
-            playList.push(getApiUrl(message, this.state.lnStatus));
+            const result = Converter.formatText(
+              message,
+              [".", "!", "?", ":", ";", ",", " "],
+              90,
+              userstate['emotes']
+            );
+            const lnResult = this.state.lnStatus;
+            result.message.forEach(function (t) {
+              var result = getTTSUrl(t, lnResult);
+              playList.push(result);
+            });
             msg = Converter.formatTwitchEmotes(message, userstate.emotes);
           }
-          var data = {
+          let data = {
             type: "s",
             user: username,
             messageAll: msg,
@@ -334,6 +363,42 @@ class App extends Component {
             cheerImg: 0,
             donation: "",
             subTier: true,
+          };
+          queue.push(data);
+          if (!this.state.running) {
+            this.setState({
+              running: true,
+            });
+            this.alertExec();
+          }
+        }
+        else if (this.state.source){
+          let playList = [];
+          let msg = "";
+          if (message != null && message != "") {
+            const result = Converter.formatText(
+              message,
+              [".", "!", "?", ":", ";", ",", " "],
+              90,
+              userstate['emotes']
+            );
+            const lnResult = this.state.lnStatus;
+            result.message.forEach(function (t) {
+              var result = getTTSUrl(t, lnResult);
+              playList.push(result);
+            });
+            msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+          }
+          let data = {
+            type: "s",
+            user: username,
+            messageAll: msg,
+            message: [],
+            soundUrl: playList,
+            cheer: 0,
+            emotes: userstate.emotes,
+            cheerImg: 0,
+            donation: "",
           };
           queue.push(data);
           if (!this.state.running) {
@@ -376,13 +441,23 @@ class App extends Component {
         // console.log(methods);
         // console.log(userstate);
         if (methods.plan == "3000") {
-          var playList = [];
-          var msg = "";
+          let playList = [];
+          let msg = "";
           if (message != null && message != "") {
-            playList.push(getApiUrl(message, this.state.lnStatus));
+            const result = Converter.formatText(
+              message,
+              [".", "!", "?", ":", ";", ",", " "],
+              90,
+              userstate['emotes']
+            );
+            const lnResult = this.state.lnStatus;
+            result.message.forEach(function (t) {
+              var result = getTTSUrl(t, lnResult);
+              playList.push(result);
+            });
             msg = Converter.formatTwitchEmotes(message, userstate.emotes);
           }
-          var data = {
+          let data = {
             type: "s",
             user: username,
             messageAll: msg,
@@ -393,6 +468,42 @@ class App extends Component {
             cheerImg: 0,
             donation: "",
             subTier: true,
+          };
+          queue.push(data);
+          if (!this.state.running) {
+            this.setState({
+              running: true,
+            });
+            this.alertExec();
+          }
+        }
+        else if (this.state.source) {
+          let playList = [];
+          let msg = "";
+          if (message != null && message != "") {
+            const result = Converter.formatText(
+              message,
+              [".", "!", "?", ":", ";", ",", " "],
+              90,
+              userstate['emotes']
+            );
+            const lnResult = this.state.lnStatus;
+            result.message.forEach(function (t) {
+              var result = getTTSUrl(t, lnResult);
+              playList.push(result);
+            });
+            msg = Converter.formatTwitchEmotes(message, userstate.emotes);
+          }
+          let data = {
+            type: "s",
+            user: username,
+            messageAll: msg,
+            message: [],
+            soundUrl: playList,
+            cheer: 0,
+            emotes: userstate.emotes,
+            cheerImg: 0,
+            donation: "",
           };
           queue.push(data);
           if (!this.state.running) {
@@ -428,34 +539,72 @@ class App extends Component {
         // }
       }
     );
-    // client.on('cheer', (channel, userstate, message) => {
-    //   var result = Converter.formatText(message, [".", "!", "?", ":", ";", ",", " "], 90, userstate.emotes);
-    //   var bit = result.count;
-    //   var playList = [];
-    //   playList.push(CheerSound);
-    //   const r = this.state.lnStatus;
-    //   result.message.forEach(function (t) {
-    //     var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat("&tl=" + getRamdomLn(this.state.lnStatus)));
-    //     playList.push(result);
-    //   })
-    //   var data = {
-    //     type: 'c',
-    //     user: userstate['display-name'],
-    //     messageAll: result.display,
-    //     message: result.message,
-    //     soundUrl: playList,
-    //     cheer: userstate.bits,
-    //     emotes: userstate.emotes,
-    //     cheerImg: this.getRamdom()
-    //   }
-    //   queue.push(data);
-    //   if (!this.state.running) {
-    //     this.setState({
-    //       running: true
-    //     })
-    //     this.alertExec();
-    //   }
-    // });
+    client.on('cheer', (channel, userstate, message) => {
+      if (this.state.source) {
+        // var result = Converter.formatText(message, [".", "!", "?", ":", ";", ",", " "], 90, userstate.emotes);
+        // var bit = result.count;
+        // var playList = [];
+        // playList.push(CheerSound);
+        // const r = this.state.lnStatus;
+        // result.message.forEach(function (t) {
+        //   var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat("&tl=" + getRamdomLn(this.state.lnStatus)));
+        //   playList.push(result);
+        // })
+        // var data = {
+        //   type: 'c',
+        //   user: userstate['display-name'],
+        //   messageAll: result.display,
+        //   message: result.message,
+        //   soundUrl: playList,
+        //   cheer: userstate.bits,
+        //   emotes: userstate.emotes,
+        //   cheerImg: this.getRamdom()
+        // }
+        // queue.push(data);
+        // if (!this.state.running) {
+        //   this.setState({
+        //     running: true
+        //   })
+        //   this.alertExec();
+        // }
+        let data = {};
+        let result;
+        let playList = [];
+        result = Converter.formatText(
+          message,
+          [".", "!", "?", ":", ";", ",", " "],
+          90,
+          userstate['emotes']
+        );
+        let bit = result.count;
+        playList.push(CheerSound);
+        const lnResult = this.state.lnStatus;
+        result.message.forEach(function (t) {
+          var result = getTTSUrl(t, lnResult);
+          playList.push(result);
+        });
+        data = {
+          type: "c",
+          name: userstate['username'],
+          user: userstate['display-name'],
+          messageAll: result.display,
+          message: result.message,
+          soundUrl: playList,
+          cheer: userstate['bits'],
+          emotes: userstate['emotes'],
+          cheerImg: this.getImgRandom(false),
+          donation: "",
+          doodle: result.doodle,
+        };
+        queue.push(data);
+        if (!this.state.running) {
+          this.setState({
+            running: true,
+          });
+          this.alertExec();
+        }
+      }
+    });
 
     client.on(
       "subgift",
@@ -465,8 +614,8 @@ class App extends Component {
         //   var data = {
         //     type: 's',
         if (methods.plan == "3000") {
-          var playList = [];
-          var data = {
+          let playList = [];
+          let data = {
             type: "s",
             user: recipient,
             messageAll: "",
@@ -477,6 +626,29 @@ class App extends Component {
             cheerImg: 0,
             donation: "",
             subTier: true,
+            //TODO
+            subGift: true,
+          };
+          queue.push(data);
+          if (!this.state.running) {
+            this.setState({
+              running: true,
+            });
+            this.alertExec();
+          }
+        }
+        else if (this.state.source) {
+          let playList = [];
+          let data = {
+            type: "s",
+            user: recipient,
+            messageAll: "",
+            message: [],
+            soundUrl: playList,
+            cheer: 0,
+            emotes: userstate.emotes,
+            cheerImg: 0,
+            donation: "",
             //TODO
             subGift: true,
           };
@@ -532,7 +704,7 @@ class App extends Component {
             context.username == "tetristhegrandmaster3"
               ? "戴口罩，勤洗手，要消毒，要洗澡"
               : "戴口罩，勤洗手，要消毒";
-          playList.push(getApiUrl(i, this.state.lnStatus));
+          playList.push(getTTSUrl(i, this.state.lnStatus));
         }
         data = {
           type: "s",
@@ -563,7 +735,7 @@ class App extends Component {
         gift = msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "g";
         if (!gift) {
           i = "我郭";
-          playList.push(getApiUrl(i, this.state.lnStatus));
+          playList.push(getTTSUrl(i, this.state.lnStatus));
         }
         data = {
           type: "s",
@@ -590,7 +762,7 @@ class App extends Component {
 
       if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
         playList.push(CheerSound);
-        i = "doodleCheer8787 doodleCheer8787";
+        i = "doodleCheer8787 喇叭饅頭 別再救啦 doodleCheer8787";
         // playList.push(getApiUrl("笑死", this.state.lnStatus));
         result = Converter.formatText(
           i,
@@ -600,7 +772,7 @@ class App extends Component {
         );
         data = {
           type: "c",
-          user: "雙渦輪師匠",
+          user: "喇叭饅頭",
           messageAll: result.display,
           message: result.message,
           soundUrl: playList,
@@ -641,6 +813,15 @@ class App extends Component {
         });
         console.log("Sub Gift Boost");
       }
+      if (isMod && msg.split(" ")[0].toLowerCase() == "!source") {
+        this.setState({
+          source:
+            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "on"
+              ? true
+              : false,
+        });
+        console.log("source change");
+      }
       if (isMod && msg.split(" ")[0].toLowerCase() == "!sound") {
         this.setState({
           soundEffect: CheerSound,
@@ -657,7 +838,7 @@ class App extends Component {
       if (isMod && msg == "!小狗><") {
         playList.push(CheerSound);
         i = "冥白了";
-        playList.push(getApiUrl(i, this.state.lnStatus));
+        playList.push(getTTSUrl(i, this.state.lnStatus));
         data = {
           type: "d",
           user: "beatmania IIDX ULTIMATE MOBILE",
@@ -706,7 +887,7 @@ class App extends Component {
           );
           const lnResult = this.state.lnStatus;
           result.message.forEach(function (t) {
-            var re = getApiUrl(t, lnResult);
+            var re = getTTSUrl(t, lnResult);
             playList.push(re);
           });
           data = {
@@ -732,7 +913,17 @@ class App extends Component {
         if (this.state.recallType == "s") {
           // playList.push(SubSound);
           if (msg != "0") {
-            playList.push(getApiUrl(msg, this.state.lnStatus));
+            const result = Converter.formatText(
+              msg,
+              [".", "!", "?", ":", ";", ",", " "],
+              90,
+              context.emotes
+            );
+            const lnResult = this.state.lnStatus;
+            result.message.forEach(function (t) {
+              var result = getTTSUrl(t, lnResult);
+              playList.push(result);
+            });
           }
           data = {
             type: "s",
@@ -758,7 +949,17 @@ class App extends Component {
         }
         if (this.state.recallType == "st") {
           if (msg != "0") {
-            playList.push(getApiUrl(msg, this.state.lnStatus));
+            const result = Converter.formatText(
+              msg,
+              [".", "!", "?", ":", ";", ",", " "],
+              90,
+              context.emotes
+            );
+            const lnResult = this.state.lnStatus;
+            result.message.forEach(function (t) {
+              var result = getTTSUrl(t, lnResult);
+              playList.push(result);
+            });
           }
           data = {
             type: "s",
@@ -850,7 +1051,9 @@ class App extends Component {
         bsound =
           this.state.giftBoost && current.subGift ? SubSoundFast : SubSound;
       }
-      if (this.getSoundRandom()) bsound = SubSoundRare;
+      const sResult = this.getSoundRandom();
+      if (sResult == 'ur') bsound = SubSoundSSRare;
+      if (sResult == 'ssr') bsound = SubSoundRare;
       current.soundUrl.unshift(bsound);
     }
     var sound = current.soundUrl.shift();

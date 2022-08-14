@@ -10,6 +10,15 @@
 
 ## 版本
 
+### version 0.8.0
+- 修正 sub 長度斷句
+- 新增 source 切換
+- 新增音效
+- function 名修改
+
+### version 0.7.2
+- 新增喇叭饅頭
+
 ### version 0.7.1
 - bug fixed
 

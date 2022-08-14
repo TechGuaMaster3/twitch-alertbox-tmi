@@ -55,6 +55,8 @@ import zawarudo from './sound/FX/Jojo/zawarudo.mp3';
 //Bonk
 import bonksd from './sound/FX/bonksd.mp3';
 import bonkhd from './sound/FX/bonkhd.mp3';
+//out
+import out from './sound/FX/out.mp3';
 
 export default {
     //YuGiOh
@@ -114,4 +116,6 @@ export default {
     //Bonk
     "bonksd": bonksd,
     "bonkhd": bonkhd,
+    //out
+    "out": out,
 };
