@@ -11,6 +11,7 @@ import SubSoundFast from "./sound/sub_fast.mp3";
 import SubSoundRare from "./sound/sub_rare.mp3";
 import SubSoundSSRare from "./sound/sub_super_rare.mp3";
 import CheerSound from "./sound/cheer.mp3";
+import CheerJackpotSound from "./sound/cheer_jackpot.mp3";
 import tmi from "tmi.js";
 import SoundList from "./SoundList";
 const io = require("socket.io-client");
@@ -21,9 +22,14 @@ const channelList = ["tetristhegrandmaster3", "tgm3backend"];
 const cooldownNormal = [10000, 5000];
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2022/08/04 ver1";
+const updateTimeLog = "2022/08/14 ver1";
 const ln = ["ch", "en", "tw", "jp", "fr", "ko"];
 const lnCount = 6;
+const SSR_LIST = [
+  107, 144, 169, 188, 206, 235, 269, 297, 304, 337, 338, 363, 377, 421, 432,
+  476, 498, 545, 589, 589, 594, 618, 626, 661, 683, 747, 765, 768, 776, 80,
+];
+const UR_LIST = [822, 838, 869, 872, 909];
 
 var queue = [];
 var current = null;
@@ -106,10 +112,10 @@ class App extends Component {
   };
 
   getSoundRandom = (type) => {
-    var c = Math.floor(Math.random() * 10000) + 1;
-    if(c>9950) return 'ur';
-    if(c>9650) return 'ssr';
-    return 'n'; 
+    var c = Math.floor(Math.random() * 1000) + 1;
+    if (UR_LIST.includes(c)) return "ur";
+    if (SSR_LIST.includes(c)) return "ssr";
+    return "n";
   };
 
   streamlabsEmotesFormatter = (text) => {
@@ -217,7 +223,8 @@ class App extends Component {
       }
       if (eventData.for === "twitch_account") {
         if (
-          !this.state.source && (eventData.type == "resub" || eventData.type == "subscription") &&
+          !this.state.source &&
+          (eventData.type == "resub" || eventData.type == "subscription") &&
           eventData.message[0].sub_plan !== "3000"
         ) {
           playList = [];
@@ -230,7 +237,6 @@ class App extends Component {
             eventData.message[0].message != null &&
             eventData.message[0].message != ""
           ) {
-            
             result = Converter.splitTextV1(
               eventData.message[0].message,
               [".", "!", "?", ":", ";", ",", " "],
@@ -343,7 +349,7 @@ class App extends Component {
               message,
               [".", "!", "?", ":", ";", ",", " "],
               90,
-              userstate['emotes']
+              userstate["emotes"]
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
@@ -371,8 +377,7 @@ class App extends Component {
             });
             this.alertExec();
           }
-        }
-        else if (this.state.source){
+        } else if (this.state.source) {
           let playList = [];
           let msg = "";
           if (message != null && message != "") {
@@ -380,7 +385,7 @@ class App extends Component {
               message,
               [".", "!", "?", ":", ";", ",", " "],
               90,
-              userstate['emotes']
+              userstate["emotes"]
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
@@ -448,7 +453,7 @@ class App extends Component {
               message,
               [".", "!", "?", ":", ";", ",", " "],
               90,
-              userstate['emotes']
+              userstate["emotes"]
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
@@ -476,8 +481,7 @@ class App extends Component {
             });
             this.alertExec();
           }
-        }
-        else if (this.state.source) {
+        } else if (this.state.source) {
           let playList = [];
           let msg = "";
           if (message != null && message != "") {
@@ -485,7 +489,7 @@ class App extends Component {
               message,
               [".", "!", "?", ":", ";", ",", " "],
               90,
-              userstate['emotes']
+              userstate["emotes"]
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
@@ -539,7 +543,7 @@ class App extends Component {
         // }
       }
     );
-    client.on('cheer', (channel, userstate, message) => {
+    client.on("cheer", (channel, userstate, message) => {
       if (this.state.source) {
         // var result = Converter.formatText(message, [".", "!", "?", ":", ";", ",", " "], 90, userstate.emotes);
         // var bit = result.count;
@@ -574,7 +578,7 @@ class App extends Component {
           message,
           [".", "!", "?", ":", ";", ",", " "],
           90,
-          userstate['emotes']
+          userstate["emotes"]
         );
         let bit = result.count;
         playList.push(CheerSound);
@@ -585,13 +589,13 @@ class App extends Component {
         });
         data = {
           type: "c",
-          name: userstate['username'],
-          user: userstate['display-name'],
+          name: userstate["username"],
+          user: userstate["display-name"],
           messageAll: result.display,
           message: result.message,
           soundUrl: playList,
-          cheer: userstate['bits'],
-          emotes: userstate['emotes'],
+          cheer: userstate["bits"],
+          emotes: userstate["emotes"],
           cheerImg: this.getImgRandom(false),
           donation: "",
           doodle: result.doodle,
@@ -636,8 +640,7 @@ class App extends Component {
             });
             this.alertExec();
           }
-        }
-        else if (this.state.source) {
+        } else if (this.state.source) {
           let playList = [];
           let data = {
             type: "s",
@@ -762,7 +765,7 @@ class App extends Component {
 
       if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
         playList.push(CheerSound);
-        i = "doodleCheer8787 喇叭饅頭 別再救啦 doodleCheer8787";
+        i = "doodleCheer8787 分からないよ doodleCheer8787";
         // playList.push(getApiUrl("笑死", this.state.lnStatus));
         result = Converter.formatText(
           i,
@@ -772,7 +775,7 @@ class App extends Component {
         );
         data = {
           type: "c",
-          user: "喇叭饅頭",
+          user: "大樹わかるマン",
           messageAll: result.display,
           message: result.message,
           soundUrl: playList,
@@ -1052,19 +1055,22 @@ class App extends Component {
           this.state.giftBoost && current.subGift ? SubSoundFast : SubSound;
       }
       const sResult = this.getSoundRandom();
-      if (sResult == 'ur') bsound = SubSoundSSRare;
-      if (sResult == 'ssr') bsound = SubSoundRare;
+      if (sResult == "ur") bsound = SubSoundSSRare;
+      if (sResult == "ssr") bsound = SubSoundRare;
       current.soundUrl.unshift(bsound);
     }
-    var sound = current.soundUrl.shift();
     var img = this.state.basilisk ? this.getImgRandom(true) : current.cheerImg;
     if (current.doodle) {
       img = "d";
       displayTime = 18500;
     }
+    if (img == "mao" || img == "kero") {
+      current.soundUrl.unshift(CheerJackpotSound);
+    }
     var name = current.name ? current.name : "";
     if (this.state.kero && name.toLowerCase() == "feline_mao") img = "mao";
     if (this.state.mao && name.toLowerCase() == "taikonokero") img = "kero";
+    var sound = current.soundUrl.shift();
     this.setState({
       sound: sound,
       subState: current.type == "s" ? true : false,

@@ -10,6 +10,10 @@
 
 ## 版本
 
+### version 0.8.1
+- sub rare 機率更新
+- 新增 JACKPOT sound 
+
 ### version 0.8.0
 - 修正 sub 長度斷句
 - 新增 source 切換
