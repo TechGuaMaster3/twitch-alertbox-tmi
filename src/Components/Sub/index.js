@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Converter from '../../model/Converter';
 import parse from 'html-react-parser';
 import './Sub.css';
 import subImg from '../../img/sub/sub.gif'
@@ -17,7 +16,7 @@ class Sub extends Component {
                         <div id="particles" />
                         <div id="wrap">
                             <div id="alert-image-wrap">
-                                <div id="alert-image" style={{ backgroundImage: 'url("' + imgResult + '")' }}><img style={{ height: '1px', opacity: 0, width: '1px' }} src={imgResult} /></div>
+                                <div id="alert-image" style={{ backgroundImage: 'url("' + imgResult + '")' }}><img alt="sub" style={{ height: '1px', opacity: 0, width: '1px' }} src={imgResult} /></div>
                             </div>
                             <div id="alert-text-wrap">
                                 <div id="alert-text">

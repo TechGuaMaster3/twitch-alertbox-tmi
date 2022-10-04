@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import parse from 'html-react-parser';
 import './Donation.css';
 
 class Donation extends Component {
@@ -13,7 +12,7 @@ class Donation extends Component {
                         <div id="particles" className="hidden" />
                         <div id="wrap">
                         <div id="alert-image-wrap">
-                            <div id="alert-image" style={{backgroundImage: 'url("https://uploads.twitchalerts.com/000/047/281/189/250208.gif")'}}><img style={{height: '1px', opacity: 0, width: '1px'}} src="https://uploads.twitchalerts.com/000/047/281/189/250208.gif" /></div>
+                            <div id="alert-image" style={{backgroundImage: 'url("https://uploads.twitchalerts.com/000/047/281/189/250208.gif")'}}><img alt="donate" style={{height: '1px', opacity: 0, width: '1px'}} src="https://uploads.twitchalerts.com/000/047/281/189/250208.gif" /></div>
                         </div>
                         <div id="alert-text-wrap">
                             <div id="alert-text">

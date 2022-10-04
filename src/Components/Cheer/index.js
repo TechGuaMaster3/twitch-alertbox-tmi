@@ -14,7 +14,7 @@ class Cheer extends Component {
                         <div id="particles" className="hidden" />
                         <div id="wrap">
                             <div id="alert-image-wrap">
-                                <div id="alert-image" style={{ backgroundImage: 'url("' + imgList.default + '")' }}><img style={{ height: '1px', opacity: 0, width: '1px' }} src={imgList.default} /></div>
+                                <div id="alert-image" style={{ backgroundImage: 'url("' + imgList.default + '")' }}><img alt="cheer" style={{ height: '1px', opacity: 0, width: '1px' }} src={imgList.default} /></div>
                             </div>
                             <div id="alert-text-wrap">
                                 <div id="alert-text">

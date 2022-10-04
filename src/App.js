@@ -20,6 +20,7 @@ const gifCount = 40;
 const bgifCount = 25;
 const channelList = ["tetristhegrandmaster3", "tgm3backend"];
 const cooldownNormal = [10000, 5000];
+// const elevatedTime = 30000;
 //TODO
 const cooldownFast = [4000, 2000];
 const updateTimeLog = "2022/08/14 ver1";
@@ -36,9 +37,9 @@ var current = null;
 
 const getRamdomLn = (lang) => {
   if (lang === "random") {
-    var a = 0,
+    let a = 0,
       j;
-    var ran = Math.random() * 1;
+    const ran = Math.random() * 1;
     for (j = 1; j <= lnCount; j++) {
       if (ran < j * (1 / lnCount)) {
         a = j - 1;
@@ -53,10 +54,9 @@ const getRamdomLn = (lang) => {
 };
 
 const getTTSUrl = (text, lang) => {
-  var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(
+  return "https://m3ntru-api.vercel.app/api/TTS/one?text=".concat(
     encodeURIComponent(text).concat("&tl=" + getRamdomLn(lang))
   );
-  return result;
 };
 
 class App extends Component {
@@ -94,10 +94,10 @@ class App extends Component {
   }
 
   getImgRandom = (type) => {
-    var i = type ? bgifCount : gifCount;
-    var j,
-      ran = Math.random() * 10000;
-    var randomCheerImg = 0;
+    const i = type ? bgifCount : gifCount;
+    const ran = Math.random() * 10000;
+    let j;
+    let randomCheerImg = 0;
     for (j = 1; j <= i; j++) {
       if (ran < j * (10000 / i)) {
         randomCheerImg = j - 1;
@@ -105,14 +105,14 @@ class App extends Component {
       }
     }
     if (type) randomCheerImg = "b" + randomCheerImg;
-    var c = Math.floor(Math.random() * 8192) + 1;
-    if (type && c == 8192) randomCheerImg = "mao";
-    if (type && c == 8191) randomCheerImg = "kero";
+    const c = Math.floor(Math.random() * 8192) + 1;
+    if (type && c === 8192) randomCheerImg = "mao";
+    if (type && c === 8191) randomCheerImg = "kero";
     return randomCheerImg;
   };
 
-  getSoundRandom = (type) => {
-    var c = Math.floor(Math.random() * 1000) + 1;
+  getSoundRandom = () => {
+    const c = Math.floor(Math.random() * 1000) + 1;
     if (UR_LIST.includes(c)) return "ur";
     if (SSR_LIST.includes(c)) return "ssr";
     return "n";
@@ -120,10 +120,10 @@ class App extends Component {
 
   streamlabsEmotesFormatter = (text) => {
     if (text == null) return;
-    var result = {};
+    let result = {};
     text.split("/").forEach(function (t) {
-      var temp = t.split(":");
-      var emoteList = [];
+      const temp = t.split(":");
+      const emoteList = [];
       temp[1].split(",").forEach(function (t) {
         emoteList.push(t);
       });
@@ -133,9 +133,7 @@ class App extends Component {
   };
 
   getSetting = async () => {
-    await fetch(
-      "https://m3ntru-tts.herokuapp.com/api/alert/tetristhegrandmaster3"
-    )
+    await fetch("https://m3ntru-api.vercel.app/api/alert/tetristhegrandmaster3")
       .then((response) => {
         return response.json();
       })
@@ -157,7 +155,6 @@ class App extends Component {
     );
     const paramsUser = new URLSearchParams(window.location.search).get("user");
     const paramsKey = new URLSearchParams(window.location.search).get("key");
-    //const foo = params.get('');
     console.log(paramsToken);
     console.log(paramsUser);
     console.log(paramsKey);
@@ -167,7 +164,7 @@ class App extends Component {
         tmiUser: true,
       });
     }
-    var token = paramsToken;
+    const token = paramsToken;
 
     //Connect to socket
     const streamlabs = io(`https://sockets.streamlabs.com?token=${token}`, {
@@ -186,7 +183,6 @@ class App extends Component {
       var playList = [];
       var result;
       if (eventData.type === "donation") {
-        //code to handle donation events
         playList.push(CheerSound);
         result = Converter.splitTextV1(
           eventData.message[0].message,
@@ -199,8 +195,8 @@ class App extends Component {
         playList.push(CheerSound);
         const lnResult = this.state.lnStatus;
         result.message.forEach(function (t) {
-          var result = getTTSUrl(t, lnResult);
-          playList.push(result);
+          const ttsResult = getTTSUrl(t, lnResult);
+          playList.push(ttsResult);
         });
         data = {
           type: "d",
@@ -224,18 +220,17 @@ class App extends Component {
       if (eventData.for === "twitch_account") {
         if (
           !this.state.source &&
-          (eventData.type == "resub" || eventData.type == "subscription") &&
+          (eventData.type === "resub" || eventData.type === "subscription") &&
           eventData.message[0].sub_plan !== "3000"
         ) {
           playList = [];
-          var msg = "";
+          let msg = "";
           processEmotes = this.streamlabsEmotesFormatter(
             eventData.message[0].emotes
           );
-          // playList.push(SubSound);
           if (
-            eventData.message[0].message != null &&
-            eventData.message[0].message != ""
+            eventData.message[0].message !== null &&
+            eventData.message[0].message !== ""
           ) {
             result = Converter.splitTextV1(
               eventData.message[0].message,
@@ -248,8 +243,8 @@ class App extends Component {
             playList.push(CheerSound);
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
-              var result = getTTSUrl(t, lnResult);
-              playList.push(result);
+              const ttsResult = getTTSUrl(t, lnResult);
+              playList.push(ttsResult);
             });
 
             msg = Converter.formatTwitchEmotes(
@@ -267,9 +262,7 @@ class App extends Component {
             emotes: processEmotes,
             cheerImg: 0,
             donation: "",
-            //todo
-            subGift: eventData.message[0].sub_type == "subgift",
-            // subGift: false
+            subGift: eventData.message[0].sub_type === "subgift",
           };
           queue.push(data);
           if (!this.state.running) {
@@ -279,8 +272,7 @@ class App extends Component {
             this.alertExec();
           }
         }
-        if (!this.state.source && eventData.type == "bits") {
-          console.log(eventData.message[0]);
+        if (!this.state.source && eventData.type === "bits") {
           processEmotes = this.streamlabsEmotesFormatter(
             eventData.message[0].emotes
           );
@@ -290,13 +282,12 @@ class App extends Component {
             90,
             processEmotes
           );
-          // var bit = result.count;
           playList = [];
           playList.push(CheerSound);
           const lnResult = this.state.lnStatus;
           result.message.forEach(function (t) {
-            let sResult = getTTSUrl(t, lnResult);
-            playList.push(sResult);
+            let ttsResult = getTTSUrl(t, lnResult);
+            playList.push(ttsResult);
           });
           data = {
             type: "c",
@@ -338,13 +329,10 @@ class App extends Component {
     client.on(
       "subscription",
       (channel, username, method, message, userstate) => {
-        // console.log(username);
-        // console.log(method);
-        // console.log(userstate);
-        if (method.plan == "3000") {
+        if (method.plan === "3000") {
           let playList = [];
           let msg = "";
-          if (message != null && message != "") {
+          if (message != null && message !== "") {
             const result = Converter.formatText(
               message,
               [".", "!", "?", ":", ";", ",", " "],
@@ -353,8 +341,8 @@ class App extends Component {
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
-              var result = getTTSUrl(t, lnResult);
-              playList.push(result);
+              const ttsResult = getTTSUrl(t, lnResult);
+              playList.push(ttsResult);
             });
             msg = Converter.formatTwitchEmotes(message, userstate.emotes);
           }
@@ -380,7 +368,7 @@ class App extends Component {
         } else if (this.state.source) {
           let playList = [];
           let msg = "";
-          if (message != null && message != "") {
+          if (message != null && message !== "") {
             const result = Converter.formatText(
               message,
               [".", "!", "?", ":", ";", ",", " "],
@@ -389,8 +377,8 @@ class App extends Component {
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
-              var result = getTTSUrl(t, lnResult);
-              playList.push(result);
+              const ttsResult = getTTSUrl(t, lnResult);
+              playList.push(ttsResult);
             });
             msg = Converter.formatTwitchEmotes(message, userstate.emotes);
           }
@@ -413,42 +401,16 @@ class App extends Component {
             this.alertExec();
           }
         }
-        // var playList = [];
-        // var msg = "";
-        // playList.push(SubSound);
-        // if (message != null) {
-        //   playList.push(getApiUrl(message, this.state.lnStatus));
-        //   msg = Converter.formatTwitchEmotes(message, userstate.emotes);
-        // }
-        // var data = {
-        //   type: 's',
-        //   user: username,
-        //   messageAll: msg,
-        //   message: [],
-        //   soundUrl: playList,
-        //   cheer: 0,
-        //   emotes: userstate.emotes,
-        //   cheerImg: 0
-        // }
-        // queue.push(data);
-        // if (!this.state.running) {
-        //   this.setState({
-        //     running: true
-        //   })
-        //   this.alertExec();
-        // }
       }
     );
     client.on(
       "resub",
       (channel, username, months, message, userstate, methods) => {
-        // console.log(username);
-        // console.log(methods);
-        // console.log(userstate);
-        if (methods.plan == "3000") {
+        console.log(methods);
+        if (methods.plan === "3000") {
           let playList = [];
           let msg = "";
-          if (message != null && message != "") {
+          if (message != null && message !== "") {
             const result = Converter.formatText(
               message,
               [".", "!", "?", ":", ";", ",", " "],
@@ -457,8 +419,8 @@ class App extends Component {
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
-              var result = getTTSUrl(t, lnResult);
-              playList.push(result);
+              const ttsResult = getTTSUrl(t, lnResult);
+              playList.push(ttsResult);
             });
             msg = Converter.formatTwitchEmotes(message, userstate.emotes);
           }
@@ -484,7 +446,7 @@ class App extends Component {
         } else if (this.state.source) {
           let playList = [];
           let msg = "";
-          if (message != null && message != "") {
+          if (message != null && message !== "") {
             const result = Converter.formatText(
               message,
               [".", "!", "?", ":", ";", ",", " "],
@@ -493,8 +455,8 @@ class App extends Component {
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
-              var result = getTTSUrl(t, lnResult);
-              playList.push(result);
+              const ttsResult = getTTSUrl(t, lnResult);
+              playList.push(ttsResult);
             });
             msg = Converter.formatTwitchEmotes(message, userstate.emotes);
           }
@@ -517,60 +479,10 @@ class App extends Component {
             this.alertExec();
           }
         }
-        // var playList = [];
-        // var msg = "";
-        // playList.push(SubSound);
-        // if (message != null && message != "") {
-        //   playList.push(getApiUrl, this.state.lnStatus);
-        //   msg = Converter.formatTwitchEmotes(message, userstate.emotes);
-        // }
-        // var data = {
-        //   type: 's',
-        //   user: username,
-        //   messageAll: msg,
-        //   message: [],
-        //   soundUrl: playList,
-        //   cheer: 0,
-        //   emotes: userstate.emotes,
-        //   cheerImg: 0
-        // }
-        // queue.push(data);
-        // if (!this.state.running) {
-        //   this.setState({
-        //     running: true
-        //   })
-        //   this.alertExec();
-        // }
       }
     );
     client.on("cheer", (channel, userstate, message) => {
       if (this.state.source) {
-        // var result = Converter.formatText(message, [".", "!", "?", ":", ";", ",", " "], 90, userstate.emotes);
-        // var bit = result.count;
-        // var playList = [];
-        // playList.push(CheerSound);
-        // const r = this.state.lnStatus;
-        // result.message.forEach(function (t) {
-        //   var result = "https://m3ntru-tts.herokuapp.com/api/TTS/one?text=".concat(encodeURIComponent(t).concat("&tl=" + getRamdomLn(this.state.lnStatus)));
-        //   playList.push(result);
-        // })
-        // var data = {
-        //   type: 'c',
-        //   user: userstate['display-name'],
-        //   messageAll: result.display,
-        //   message: result.message,
-        //   soundUrl: playList,
-        //   cheer: userstate.bits,
-        //   emotes: userstate.emotes,
-        //   cheerImg: this.getRamdom()
-        // }
-        // queue.push(data);
-        // if (!this.state.running) {
-        //   this.setState({
-        //     running: true
-        //   })
-        //   this.alertExec();
-        // }
         let data = {};
         let result;
         let playList = [];
@@ -580,12 +492,12 @@ class App extends Component {
           90,
           userstate["emotes"]
         );
-        let bit = result.count;
+        // let bit = result.count;
         playList.push(CheerSound);
         const lnResult = this.state.lnStatus;
         result.message.forEach(function (t) {
-          var result = getTTSUrl(t, lnResult);
-          playList.push(result);
+          const ttsResult = getTTSUrl(t, lnResult);
+          playList.push(ttsResult);
         });
         data = {
           type: "c",
@@ -613,11 +525,7 @@ class App extends Component {
     client.on(
       "subgift",
       (channel, username, streakMonths, recipient, methods, userstate) => {
-        //   var playList = [];
-        //   playList.push(SubSound);
-        //   var data = {
-        //     type: 's',
-        if (methods.plan == "3000") {
+        if (methods.plan === "3000") {
           let playList = [];
           let data = {
             type: "s",
@@ -663,48 +571,25 @@ class App extends Component {
             this.alertExec();
           }
         }
-        // var playList = [];
-        // playList.push(SubSound);
-        // var data = {
-        //   type: 's',
-        //   user: recipient,
-        //   messageAll: "",
-        //   message: [],
-        //   soundUrl: playList,
-        //   cheer: 0,
-        //   emotes: userstate.emotes,
-        //   cheerImg: 0
-        // }
-        // queue.push(data);
-        // if (!this.state.running) {
-        //   this.setState({
-        //     running: true
-        //   })
-        //   this.alertExec();
-        // }
       }
     );
 
     client.on("message", (target, context, msg, self) => {
-      // console.log(target);
-      // console.log(context);
-      // console.log(msg);
-      // console.log(self);
       var playList = [];
       var result;
       var i = "";
       var gift = false;
       var data = {};
-      var isMod =
-        (context.username == "tetristhegrandmaster3" ||
-          context.username == "zatd39" ||
+      const isMod =
+        (context.username === "tetristhegrandmaster3" ||
+          context.username === "zatd39" ||
           context.mod) &&
-        context.username != "nightbot";
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!戴口罩勤洗手要消毒") {
-        gift = msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "g";
+        context.username !== "nightbot";
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!戴口罩勤洗手要消毒") {
+        gift = msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "g";
         if (!gift) {
           i =
-            context.username == "tetristhegrandmaster3"
+            context.username === "tetristhegrandmaster3"
               ? "戴口罩，勤洗手，要消毒，要洗澡"
               : "戴口罩，勤洗手，要消毒";
           playList.push(getTTSUrl(i, this.state.lnStatus));
@@ -712,7 +597,7 @@ class App extends Component {
         data = {
           type: "s",
           user:
-            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "g"
+            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "g"
               ? "我就送"
               : "技正",
           messageAll: Converter.formatTwitchEmotes(i, context.emotes),
@@ -723,7 +608,7 @@ class App extends Component {
           cheerImg: 0,
           donation: "",
           //TODO
-          subGift: msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "g",
+          subGift: msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "g",
         };
         queue.push(data);
         if (!this.state.running) {
@@ -734,8 +619,8 @@ class App extends Component {
         }
       }
 
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!尊爵不凡") {
-        gift = msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "g";
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!尊爵不凡") {
+        gift = msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "g";
         if (!gift) {
           i = "我郭";
           playList.push(getTTSUrl(i, this.state.lnStatus));
@@ -763,7 +648,7 @@ class App extends Component {
         }
       }
 
-      if (isMod && (msg == "!彩學好帥" || msg == "!彩學很帥")) {
+      if (isMod && (msg === "!彩學好帥" || msg === "!彩學很帥")) {
         playList.push(CheerSound);
         i = "doodleCheer8787 分からないよ doodleCheer8787";
         // playList.push(getApiUrl("笑死", this.state.lnStatus));
@@ -792,40 +677,40 @@ class App extends Component {
           this.alertExec();
         }
       }
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!basilisktime") {
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!basilisktime") {
         this.setState({
           basilisk:
-            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "on"
+            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "on"
               ? true
               : false,
         });
         console.log("Basilisk Time");
       }
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!lang") {
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!lang") {
         this.setState({
           lnStatus: msg.split(" ")[1] ? msg.split(" ")[1] : "ch",
         });
         console.log("change lang");
       }
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!giftboost") {
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!giftboost") {
         this.setState({
           giftBoost:
-            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "on"
+            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "on"
               ? true
               : false,
         });
         console.log("Sub Gift Boost");
       }
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!source") {
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!source") {
         this.setState({
           source:
-            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() == "on"
+            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "on"
               ? true
               : false,
         });
         console.log("source change");
       }
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!sound") {
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!sound") {
         this.setState({
           soundEffect: CheerSound,
         });
@@ -833,12 +718,12 @@ class App extends Component {
           this.soundEffectSet(msg.split(" ")[1]);
         }
       }
-      if (isMod && msg.split(" ")[0].toLowerCase() == "!stop") {
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!stop") {
         this.setState({
           soundEffect: CheerSound,
         });
       }
-      if (isMod && msg == "!小狗><") {
+      if (isMod && msg === "!小狗><") {
         playList.push(CheerSound);
         i = "冥白了";
         playList.push(getTTSUrl(i, this.state.lnStatus));
@@ -863,24 +748,24 @@ class App extends Component {
       }
 
       if (
-        msg.split(" ")[0].toLowerCase() == "!厄介mode" &&
-        context.username == "taikonokero"
+        msg.split(" ")[0].toLowerCase() === "!厄介mode" &&
+        context.username === "taikonokero"
       ) {
         this.setState({
-          kero: msg.split(" ")[1].toLowerCase() == "on" ? true : false,
+          kero: msg.split(" ")[1].toLowerCase() === "on" ? true : false,
         });
       }
 
       if (
-        msg.split(" ")[0].toLowerCase() == "!厄介mode" &&
-        context.username == "feline_mao"
+        msg.split(" ")[0].toLowerCase() === "!厄介mode" &&
+        context.username === "feline_mao"
       ) {
         this.setState({
-          mao: msg.split(" ")[1].toLowerCase() == "on" ? true : false,
+          mao: msg.split(" ")[1].toLowerCase() === "on" ? true : false,
         });
       }
       if (isMod && this.state.recallStatus) {
-        if (this.state.recallType == "c") {
+        if (this.state.recallType === "c") {
           playList.push(CheerSound);
           result = Converter.formatText(
             msg,
@@ -890,8 +775,8 @@ class App extends Component {
           );
           const lnResult = this.state.lnStatus;
           result.message.forEach(function (t) {
-            var re = getTTSUrl(t, lnResult);
-            playList.push(re);
+            const ttsResult = getTTSUrl(t, lnResult);
+            playList.push(ttsResult);
           });
           data = {
             type: "c",
@@ -913,9 +798,9 @@ class App extends Component {
             this.alertExec();
           }
         }
-        if (this.state.recallType == "s") {
+        if (this.state.recallType === "s") {
           // playList.push(SubSound);
-          if (msg != "0") {
+          if (msg !== "0") {
             const result = Converter.formatText(
               msg,
               [".", "!", "?", ":", ";", ",", " "],
@@ -924,15 +809,15 @@ class App extends Component {
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
-              var result = getTTSUrl(t, lnResult);
-              playList.push(result);
+              const ttsResult = getTTSUrl(t, lnResult);
+              playList.push(ttsResult);
             });
           }
           data = {
             type: "s",
             user: this.state.recallUser,
             messageAll:
-              msg != "0"
+              msg !== "0"
                 ? Converter.formatTwitchEmotes(msg, context.emotes)
                 : "",
             message: [],
@@ -950,8 +835,8 @@ class App extends Component {
             this.alertExec();
           }
         }
-        if (this.state.recallType == "st") {
-          if (msg != "0") {
+        if (this.state.recallType === "st") {
+          if (msg !== "0") {
             const result = Converter.formatText(
               msg,
               [".", "!", "?", ":", ";", ",", " "],
@@ -960,15 +845,15 @@ class App extends Component {
             );
             const lnResult = this.state.lnStatus;
             result.message.forEach(function (t) {
-              var result = getTTSUrl(t, lnResult);
-              playList.push(result);
+              const ttsResult = getTTSUrl(t, lnResult);
+              playList.push(ttsResult);
             });
           }
           data = {
             type: "s",
             user: this.state.recallUser,
             messageAll:
-              msg != "0"
+              msg !== "0"
                 ? Converter.formatTwitchEmotes(msg, context.emotes)
                 : "",
             message: [],
@@ -994,13 +879,13 @@ class App extends Component {
         });
       }
 
-      if (msg == "!reload2.0" && isMod) {
+      if (msg === "!reload2.0" && isMod) {
         window.location.reload();
       }
 
       if (
         isMod &&
-        msg.split(" ")[0].toLowerCase() == "!cheer" &&
+        msg.split(" ")[0].toLowerCase() === "!cheer" &&
         msg.split(" ")[1]
       ) {
         this.setState({
@@ -1012,7 +897,7 @@ class App extends Component {
 
       if (
         isMod &&
-        msg.split(" ")[0].toLowerCase() == "!sub" &&
+        msg.split(" ")[0].toLowerCase() === "!sub" &&
         msg.split(" ")[1]
       ) {
         this.setState({
@@ -1024,7 +909,7 @@ class App extends Component {
 
       if (
         isMod &&
-        msg.split(" ")[0].toLowerCase() == "!subt3" &&
+        msg.split(" ")[0].toLowerCase() === "!subt3" &&
         msg.split(" ")[1]
       ) {
         this.setState({
@@ -1039,12 +924,12 @@ class App extends Component {
   alertExec = () => {
     current = queue.shift();
     console.log(current);
-    var bsound = null;
-    var displayTime =
+    let bsound = null;
+    let displayTime =
       this.state.giftBoost && current.subGift
         ? cooldownFast[0]
         : cooldownNormal[0];
-    if (current.type == "s") {
+    if (current.type === "s") {
       if (current.subTier) {
         //TODO
         bsound = this.state.basilisk ? SubSound : SubT3Sound;
@@ -1055,27 +940,27 @@ class App extends Component {
           this.state.giftBoost && current.subGift ? SubSoundFast : SubSound;
       }
       const sResult = this.getSoundRandom();
-      if (sResult == "ur") bsound = SubSoundSSRare;
-      if (sResult == "ssr") bsound = SubSoundRare;
+      if (sResult === "ur") bsound = SubSoundSSRare;
+      if (sResult === "ssr") bsound = SubSoundRare;
       current.soundUrl.unshift(bsound);
     }
-    var img = this.state.basilisk ? this.getImgRandom(true) : current.cheerImg;
+    let img = this.state.basilisk ? this.getImgRandom(true) : current.cheerImg;
     if (current.doodle) {
       img = "d";
       displayTime = 18500;
     }
-    if (img == "mao" || img == "kero") {
+    if (img === "mao" || img === "kero") {
       current.soundUrl.unshift(CheerJackpotSound);
     }
-    var name = current.name ? current.name : "";
-    if (this.state.kero && name.toLowerCase() == "feline_mao") img = "mao";
-    if (this.state.mao && name.toLowerCase() == "taikonokero") img = "kero";
-    var sound = current.soundUrl.shift();
+    const name = current.name ? current.name : "";
+    if (this.state.kero && name.toLowerCase() === "feline_mao") img = "mao";
+    if (this.state.mao && name.toLowerCase() === "taikonokero") img = "kero";
+    const sound = current.soundUrl.shift();
     this.setState({
       sound: sound,
-      subState: current.type == "s" ? true : false,
-      cheerState: current.type == "c" ? true : false,
-      donationState: current.type == "d" ? true : false,
+      subState: current.type === "s" ? true : false,
+      cheerState: current.type === "c" ? true : false,
+      donationState: current.type === "d" ? true : false,
       user: current.user,
       message: current.messageAll,
       bits: current.cheer,
@@ -1089,7 +974,7 @@ class App extends Component {
   };
 
   printEnd = () => {
-    var gift = this.state.subGift;
+    const gift = this.state.subGift;
     this.setState({
       subState: false,
       cheerState: false,
@@ -1126,7 +1011,7 @@ class App extends Component {
       sound: null,
     });
     if (current.soundUrl.length) {
-      var data = current.soundUrl.shift();
+      const data = current.soundUrl.shift();
       this.setState({
         sound: data,
       });

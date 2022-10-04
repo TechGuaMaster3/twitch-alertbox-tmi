@@ -75,7 +75,7 @@ class Converter {
         g.forEach((function (t) {
             var color, height;
             var temp1 = t[2].toLowerCase();
-            var i = parseInt(t[3]);
+            // var i = parseInt(t[3]);
             if (parseInt(t[3]) >= 1e5) {
                 if (temp1 === 'cheer' || temp1 === 'doodlecheer') { color = "#f3a71a"; height = 100000; }
                 else { color = "red"; height = 10000; }

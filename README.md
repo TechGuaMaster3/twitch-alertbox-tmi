@@ -10,6 +10,10 @@
 
 ## 版本
 
+### version 0.9.0 beta
+- var -> const, let
+- formatter
+
 ### version 0.8.1
 - sub rare 機率更新
 - 新增 JACKPOT sound 

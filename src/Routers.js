@@ -10,7 +10,6 @@ export default class Routers extends Component{
           <Switch>
             <Route path="/twitch-alertbox-tmi" component={App}/>         
           </Switch>
-          {/*<Route path="/login" component={LoginRegister} />*/}
         </div>
       </div>
     )
