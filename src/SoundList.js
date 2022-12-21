@@ -58,6 +58,8 @@ import bonkhd from './sound/FX/bonkhd.mp3';
 //out
 import out from './sound/FX/out.mp3';
 
+import mgs from './sound/FX/mgs.mp3';
+
 export default {
     //YuGiOh
     "lpcountdown": lpcountdown,
@@ -118,4 +120,5 @@ export default {
     "bonkhd": bonkhd,
     //out
     "out": out,
+    "mgs": mgs,
 };

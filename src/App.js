@@ -3,6 +3,7 @@ import "./App.css";
 import Cheer from "./Components/Cheer";
 import Sub from "./Components/Sub";
 import Donation from "./Components/Donation";
+import Elevated from "./Components/Elevated";
 import Converter from "./model/Converter";
 import AudioPlayer from "react-audio-player";
 import SubSound from "./sound/sub.mp3";
@@ -20,10 +21,11 @@ const gifCount = 40;
 const bgifCount = 25;
 const channelList = ["tetristhegrandmaster3", "tgm3backend"];
 const cooldownNormal = [10000, 5000];
-// const elevatedTime = 30000;
+const elevatedTime = 30000;
+const paramsHost = new URLSearchParams(window.location.search).get("host");
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2022/08/14 ver1";
+const updateTimeLog = "2022/10/07 ver4";
 const ln = ["ch", "en", "tw", "jp", "fr", "ko"];
 const lnCount = 6;
 const SSR_LIST = [
@@ -32,6 +34,7 @@ const SSR_LIST = [
 ];
 const UR_LIST = [822, 838, 869, 872, 909];
 
+var eleQueue = [];
 var queue = [];
 var current = null;
 
@@ -61,6 +64,7 @@ const getTTSUrl = (text, lang) => {
 
 class App extends Component {
   state = {
+    badge: null,
     running: false,
     sound: null,
     printState: false,
@@ -68,6 +72,7 @@ class App extends Component {
     subState: false,
     cheerState: false,
     donationState: false,
+    elevatedState: false,
     user: "門特魯",
     bits: 0,
     message: "👲🤸",
@@ -86,12 +91,80 @@ class App extends Component {
     recallStatus: false,
     lnStatus: "ch",
     source: false,
+    elevated: {
+      emotes: {
+        875630: ["3-8"],
+        emotesv2_8528dee89a2f422a94827986d63d6aa2: ["10-18"],
+        emotesv2_8d405d268fbc4830a62874c1d8ab0942: ["20-27"],
+      },
+      username: "zatd39",
+      color: "#A51F24",
+      badges: {
+        vip: "1",
+        subscriber: "36",
+        "sub-gifter": "50",
+      },
+      message: "我就 leggyB tgm3BONK0 tgm3BONK 試試",
+      price: "15000",
+    },
+    refresh: false,
+    elevatedTimeout: null,
+    elevatedCooldown: null,
   };
 
-  componentDidMount() {
-    this.getSetting();
-    this.initTmi();
-  }
+  componentDidMount = async () => {
+    await this.getSetting();
+    await this.initTmi();
+    await this.badgeInit();
+  };
+
+  badgeInit = async () => {
+    const app = this;
+    const GetGlobalBadge = async () =>  {
+      /** Fetch Global Badge **/
+      const response = await fetch(
+        "https://badges.twitch.tv/v1/badges/global/display"
+      );
+      const data = await response.json();
+      return data.badge_sets;
+    }
+
+    const GetChannalBadge = async () =>  {
+      /** Fetch Channal Badge **/
+      const response = await fetch(
+        `https://badges.twitch.tv/v1/badges/channels/47281189/display`
+      );
+      const data = await response.json();
+      return data.badge_sets;
+    }
+
+    const twitchfetch = async () =>  {
+      /** Fetch Global & Channel Badge **/
+      let [TempGBdg, TempCBdg] = await Promise.all([
+        GetGlobalBadge(),
+        GetChannalBadge(),
+      ]);
+      /** Replace Global one with Channel's bits & sub Badge **/
+      if (TempCBdg["bits"] !== undefined) {
+        var obj = Object.assign(
+          {},
+          TempGBdg["bits"]["versions"],
+          TempCBdg["bits"]["versions"]
+        );
+        TempGBdg["bits"]["versions"] = obj;
+        delete TempCBdg["bits"];
+      }
+      if (TempCBdg["subscriber"] !== undefined) {
+        delete TempGBdg["subscriber"];
+      }
+      Object.assign(TempGBdg, TempCBdg);
+      console.log(TempGBdg);
+      app.setState({
+        badge: TempGBdg,
+      });
+    }
+    await twitchfetch();
+  };
 
   getImgRandom = (type) => {
     const i = type ? bgifCount : gifCount;
@@ -148,6 +221,41 @@ class App extends Component {
       })
       .catch((error) => console.error(error));
   };
+
+  getbadageurl = (bgd) => {
+    if (this.state.badge && bgd) {
+      return Object.entries(bgd).map((data, index) => (
+        <img
+          alt={index}
+          key={index}
+          src={this.state.badge[data[0]]["versions"][data[1]]["image_url_2x"]}
+          className="badge"
+          style={{
+            marginRight: "2px",
+            marginLeft: "2px",
+            height: "28px",
+            width: "28px",
+            verticalAlign: "bottom",
+          }}
+        />
+      ));
+    } else return null;
+  };
+
+  saveElevated = async (data) =>  {
+    const paramsElevated = new URLSearchParams(window.location.search).get("elevated");
+    const response = await fetch(
+      `https://m3ntru-api.vercel.app/api/elevated/`, {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${paramsElevated}`, // notice the Bearer before your token
+        },
+        body: JSON.stringify(data)
+      }
+    );
+    console.log(response);
+  }
 
   initTmi = () => {
     const paramsToken = new URLSearchParams(window.location.search).get(
@@ -585,6 +693,26 @@ class App extends Component {
           context.username === "zatd39" ||
           context.mod) &&
         context.username !== "nightbot";
+      if (context["pinned-chat-paid-amount"]) {
+        this.soundEffectSet("mgs");
+        if(paramsHost === "1"){
+          this.saveElevated({
+            twitch: target,
+            emotes: context.emotes,
+            username: context.username,
+            color: context.color,
+            badges: context.badges,
+            message: msg,
+            price: context["pinned-chat-paid-amount"],
+            priceRaw: {
+              amount: context["pinned-chat-paid-amount"],
+              canonical: context["pinned-chat-paid-canonical-amount"],
+              currency: context["pinned-chat-paid-currency"],
+              exponent: context["pinned-chat-paid-exponent"],
+            }
+          })
+        }
+      }
       if (isMod && msg.split(" ")[0].toLowerCase() === "!戴口罩勤洗手要消毒") {
         gift = msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "g";
         if (!gift) {
@@ -918,59 +1046,156 @@ class App extends Component {
           recallUser: msg.split(" ")[1],
         });
       }
+      if (
+        isMod &&
+        msg.split(" ")[0].toLowerCase() === "!elestart" &&
+        msg.split(" ")[1]
+      ) {
+        const paramsElevated = new URLSearchParams(window.location.search).get("elevated");
+        fetch(`https://m3ntru-api.vercel.app/api/elevated/${msg.split(" ")[1]}`, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${paramsElevated}`, // notice the Bearer before your token
+          },
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            // console.log({
+            //   emotes: data.emotes,
+            //   username: data.username,
+            //   color: data.color,
+            //   badges: data.badges,
+            //   message: data.message,
+            //   price: data.price,
+            // })
+            eleQueue.push({
+              emotes: data.emotes,
+              username: data.username,
+              color: data.color,
+              badges: data.badges,
+              message: data.message,
+              price: data.price,
+            })
+            // this.setState({
+            //   elevated: {
+            //     emotes: data.emotes,
+            //     username: data.username,
+            //     color: data.color,
+            //     badges: data.badges,
+            //     message: data.message,
+            //     price: data.price,
+            //   },
+            //   refresh: !this.state.refresh,
+            //   elevatedState: true,
+            // })
+            if (!this.state.running) {
+              this.setState({
+                running: true,
+              });
+              this.alertExec();
+            }
+          })
+          .catch((error) => console.error(error));
+      }
+      if (
+        isMod &&
+        msg.split(" ")[0].toLowerCase() === "!elestop"
+      ) {
+        clearTimeout(this.state.elevatedTimeout);
+        clearTimeout(this.state.elevatedCooldown);
+        this.setState({
+          subState: false,
+          cheerState: false,
+          donationState: false,
+          elevatedState: false,
+        });
+        if (queue.length  || eleQueue.length) {
+          this.alertExec();
+        } else {
+          this.setState({
+            running: false,
+          });
+        }
+      }
     });
   };
 
   alertExec = () => {
-    current = queue.shift();
-    console.log(current);
-    let bsound = null;
-    let displayTime =
-      this.state.giftBoost && current.subGift
-        ? cooldownFast[0]
-        : cooldownNormal[0];
-    if (current.type === "s") {
-      if (current.subTier) {
-        //TODO
-        bsound = this.state.basilisk ? SubSound : SubT3Sound;
-        if (this.state.giftBoost && current.subGift) bsound = SubSoundFast;
-      } else {
-        //TODO
-        bsound =
-          this.state.giftBoost && current.subGift ? SubSoundFast : SubSound;
+    if (eleQueue.length > 0) {
+      current = eleQueue.shift();
+      console.log(current);
+      this.setState({
+        elevated: {
+          emotes: current.emotes,
+          username: current.username,
+          color: current.color,
+          badges: current.badges,
+          message: current.message,
+          price: current.price,
+        },
+        refresh: !this.state.refresh,
+        subState: false,
+        cheerState: false,
+        donationState: false,
+        elevatedState: true,
+        elevatedTimeout: setTimeout(() => this.elePrintEnd(), elevatedTime),
+      }) 
+    }
+    else {
+      current = queue.shift();
+      console.log(current);
+      let bsound = null;
+      let displayTime =
+        this.state.giftBoost && current.subGift
+          ? cooldownFast[0]
+          : cooldownNormal[0];
+      if (current.type === "s") {
+        if (current.subTier) {
+          //TODO
+          bsound = this.state.basilisk ? SubSound : SubT3Sound;
+          if (this.state.giftBoost && current.subGift) bsound = SubSoundFast;
+        } else {
+          //TODO
+          bsound =
+            this.state.giftBoost && current.subGift ? SubSoundFast : SubSound;
+        }
+        const sResult = this.getSoundRandom();
+        if (sResult === "ur") bsound = SubSoundSSRare;
+        if (sResult === "ssr") bsound = SubSoundRare;
+        current.soundUrl.unshift(bsound);
       }
-      const sResult = this.getSoundRandom();
-      if (sResult === "ur") bsound = SubSoundSSRare;
-      if (sResult === "ssr") bsound = SubSoundRare;
-      current.soundUrl.unshift(bsound);
+      let img = this.state.basilisk ? this.getImgRandom(true) : current.cheerImg;
+      if (current.doodle) {
+        img = "d";
+        displayTime = 18500;
+      }
+      if (img === "mao" || img === "kero") {
+        current.soundUrl.unshift(CheerJackpotSound);
+      }
+      const name = current.name ? current.name : "";
+      if (this.state.kero && name.toLowerCase() === "feline_mao") img = "mao";
+      if (this.state.mao && name.toLowerCase() === "taikonokero") img = "kero";
+      const sound = current.soundUrl.shift();
+      this.setState({
+        sound: sound,
+        subState: current.type === "s" ? true : false,
+        cheerState: current.type === "c" ? true : false,
+        donationState: current.type === "d" ? true : false,
+        elevatedState: false,
+        user: current.user,
+        message: current.messageAll,
+        bits: current.cheer,
+        emotes: current.emotes,
+        cheerImg: img,
+        donationAmount: current.donation,
+        subTier: current.subTier ? true : false,
+        subGift: current.subGift,
+      });
+      setTimeout(() => this.printEnd(), displayTime);
     }
-    let img = this.state.basilisk ? this.getImgRandom(true) : current.cheerImg;
-    if (current.doodle) {
-      img = "d";
-      displayTime = 18500;
-    }
-    if (img === "mao" || img === "kero") {
-      current.soundUrl.unshift(CheerJackpotSound);
-    }
-    const name = current.name ? current.name : "";
-    if (this.state.kero && name.toLowerCase() === "feline_mao") img = "mao";
-    if (this.state.mao && name.toLowerCase() === "taikonokero") img = "kero";
-    const sound = current.soundUrl.shift();
-    this.setState({
-      sound: sound,
-      subState: current.type === "s" ? true : false,
-      cheerState: current.type === "c" ? true : false,
-      donationState: current.type === "d" ? true : false,
-      user: current.user,
-      message: current.messageAll,
-      bits: current.cheer,
-      emotes: current.emotes,
-      cheerImg: img,
-      donationAmount: current.donation,
-      subTier: current.subTier ? true : false,
-      subGift: current.subGift,
-    });
-    setTimeout(() => this.printEnd(), displayTime);
   };
 
   printEnd = () => {
@@ -979,6 +1204,7 @@ class App extends Component {
       subState: false,
       cheerState: false,
       donationState: false,
+      elevatedState: false,
     });
     setTimeout(
       () => this.printCooldown(),
@@ -992,7 +1218,7 @@ class App extends Component {
         playState: false,
         printState: false,
       });
-      if (queue.length) {
+      if (queue.length || eleQueue.length) {
         this.alertExec();
       } else {
         this.setState({
@@ -1021,7 +1247,7 @@ class App extends Component {
           playState: false,
           printState: false,
         });
-        if (queue.length) {
+        if (queue.length  || eleQueue.length) {
           this.alertExec();
         } else {
           this.setState({
@@ -1035,6 +1261,26 @@ class App extends Component {
       }
     }
   };
+
+  elePrintEnd  = () => {
+    this.setState({
+      subState: false,
+      cheerState: false,
+      donationState: false,
+      elevatedState: false,
+      elevatedCooldown: setTimeout(() => this.eleCooldown(), 2000),
+    });
+  }
+
+  eleCooldown = () => {
+    if (queue.length  || eleQueue.length) {
+      this.alertExec();
+    } else {
+      this.setState({
+        running: false,
+      });
+    }
+  }
 
   soundEffectSet = (sound) => {
     this.setState({
@@ -1051,7 +1297,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
+        <div className="App-header">
           <div className={this.state.subState ? "fadeIn" : "fadeOut"}>
             <Sub
               username={this.state.user}
@@ -1074,7 +1320,18 @@ class App extends Component {
               donationAmount={this.state.donationAmount}
             />
           </div>
-        </header>
+          <div className={this.state.elevatedState ? "fadeIn" : "fadeOut"} style={{height: "100%" , width: "100%"}}>
+            <Elevated
+              badge={this.getbadageurl(this.state.elevated.badges)}
+              username={this.state.elevated.username}
+              color={this.state.elevated.color}
+              message={Converter.formatTwitchEmotes(this.state.elevated.message, this.state.elevated.emotes)}
+              price={this.state.elevated.price}
+              length={this.state.elevated.message.length}
+              refresh={this.state.refresh}
+            />
+          </div>
+        </div>
         <AudioPlayer
           src={this.state.sound}
           title={""}

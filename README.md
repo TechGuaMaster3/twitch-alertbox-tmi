@@ -10,6 +10,11 @@
 
 ## 版本
 
+### version 0.10.0 
+- add tailwind
+- 新增 Elevated Message
+- 新增音效
+
 ### version 0.9.0 beta
 - var -> const, let
 - formatter
