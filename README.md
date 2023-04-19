@@ -1,14 +1,19 @@
 # Copycat Alertbox For tgm3 By M3ntru
 
+https://techguamaster3.github.io/twitch-alertbox-tmi
+
 一個因為 [StreamLab Alert Box TTS 功能故障](https://hackmd.io/@M3ntru/AlertBoxIssue)  
 而誕生的仿製 Alert Box for 彩學台
+
+([Control Panel](https://github.com/TechGuaMaster3/tgm3-control-panel) source 切換至 st 時需加上 token=streamlabs token 才可使用)
 
 #### 2021/06/08 StreamLab Alert box TTS 已修復，
 #### 目前仍於[彩學台](https://www.twitch.tv/tetristhegrandmaster3)運作中
 
-(預計將此功能合併回斷句模擬器)
-
 ## 版本
+
+### version 0.10.1 
+- README 更新
 
 ### version 0.10.0 
 - add tailwind
