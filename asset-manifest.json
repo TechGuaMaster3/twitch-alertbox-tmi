@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/twitch-alertbox-tmi/static/css/main.236e83f1.chunk.css",
-    "main.js": "/twitch-alertbox-tmi/static/js/main.2f960bf5.chunk.js",
-    "main.js.map": "/twitch-alertbox-tmi/static/js/main.2f960bf5.chunk.js.map",
+    "main.js": "/twitch-alertbox-tmi/static/js/main.ce6dafe3.chunk.js",
+    "main.js.map": "/twitch-alertbox-tmi/static/js/main.ce6dafe3.chunk.js.map",
     "runtime-main.js": "/twitch-alertbox-tmi/static/js/runtime-main.560c0ee2.js",
     "runtime-main.js.map": "/twitch-alertbox-tmi/static/js/runtime-main.560c0ee2.js.map",
     "static/js/2.c942e70e.chunk.js": "/twitch-alertbox-tmi/static/js/2.c942e70e.chunk.js",
@@ -50,7 +50,7 @@
     "static/media/caesar.71802f9e.mp3": "/twitch-alertbox-tmi/static/media/caesar.71802f9e.mp3",
     "static/media/cheer.089e4f3c.mp3": "/twitch-alertbox-tmi/static/media/cheer.089e4f3c.mp3",
     "static/media/cheer_jackpot.e8ba9023.mp3": "/twitch-alertbox-tmi/static/media/cheer_jackpot.e8ba9023.mp3",
-    "static/media/coin.f8be5f34.mp3": "/twitch-alertbox-tmi/static/media/coin.f8be5f34.mp3",
+    "static/media/coin.7fc98ffa.mp3": "/twitch-alertbox-tmi/static/media/coin.7fc98ffa.mp3",
     "static/media/commercial.9d54da4f.mp3": "/twitch-alertbox-tmi/static/media/commercial.9d54da4f.mp3",
     "static/media/dai3bukan.6cb3ef6c.mp3": "/twitch-alertbox-tmi/static/media/dai3bukan.6cb3ef6c.mp3",
     "static/media/destroy.32516c39.mp3": "/twitch-alertbox-tmi/static/media/destroy.32516c39.mp3",
@@ -112,6 +112,6 @@
     "static/js/runtime-main.560c0ee2.js",
     "static/js/2.c942e70e.chunk.js",
     "static/css/main.236e83f1.chunk.css",
-    "static/js/main.2f960bf5.chunk.js"
+    "static/js/main.ce6dafe3.chunk.js"
   ]
 }
