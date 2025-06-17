@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/twitch-alertbox-tmi/static/css/main.d8fb9a44.css",
-    "main.js": "/twitch-alertbox-tmi/static/js/main.a5458d37.js",
+    "main.css": "/twitch-alertbox-tmi/static/css/main.a1c9783a.css",
+    "main.js": "/twitch-alertbox-tmi/static/js/main.d6cb912e.js",
     "static/js/453.65b3daf3.chunk.js": "/twitch-alertbox-tmi/static/js/453.65b3daf3.chunk.js",
     "static/media/sub_t3.gif": "/twitch-alertbox-tmi/static/media/sub_t3.c9fa06ab034838b14c2f.gif",
     "static/media/bit (b2).gif": "/twitch-alertbox-tmi/static/media/bit (b2).25a8cadfee7fc2d89b4f.gif",
@@ -99,12 +99,12 @@
     "static/media/bonksd.mp3": "/twitch-alertbox-tmi/static/media/bonksd.6ebb77bdb3cde418f166.mp3",
     "static/media/cheer.mp3": "/twitch-alertbox-tmi/static/media/cheer.089e4f3c6d4e9d728704.mp3",
     "index.html": "/twitch-alertbox-tmi/index.html",
-    "main.d8fb9a44.css.map": "/twitch-alertbox-tmi/static/css/main.d8fb9a44.css.map",
-    "main.a5458d37.js.map": "/twitch-alertbox-tmi/static/js/main.a5458d37.js.map",
+    "main.a1c9783a.css.map": "/twitch-alertbox-tmi/static/css/main.a1c9783a.css.map",
+    "main.d6cb912e.js.map": "/twitch-alertbox-tmi/static/js/main.d6cb912e.js.map",
     "453.65b3daf3.chunk.js.map": "/twitch-alertbox-tmi/static/js/453.65b3daf3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d8fb9a44.css",
-    "static/js/main.a5458d37.js"
+    "static/css/main.a1c9783a.css",
+    "static/js/main.d6cb912e.js"
   ]
 }
