@@ -31,6 +31,7 @@ html {
     font-family: "Microsoft JhengHei",sans-serif !important;
 }
 #alert-user-message img {
+    display: inline;
     vertical-align: middle;
     height: 1em;
 }

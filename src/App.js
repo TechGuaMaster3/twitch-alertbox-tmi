@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import "./App.css";
-import Cheer from "./Components/Cheer";
-import Sub from "./Components/Sub";
-import Donation from "./Components/Donation";
-import Elevated from "./Components/Elevated";
+import Cheer from "./components/Cheer";
+import Sub from "./components/Sub/index.js";
+import Donation from "./components/Donation/index.js";
+import Elevated from "./components/Elevated/index.js";
 import Converter from "./model/Converter";
 import AudioPlayer from "react-audio-player";
 import SubSound from "./sound/sub.mp3";
@@ -12,6 +12,7 @@ import SubSoundFast from "./sound/sub_fast.mp3";
 import SubSoundRare from "./sound/sub_rare.mp3";
 import SubSoundSSRare from "./sound/sub_super_rare.mp3";
 import CheerSound from "./sound/cheer.mp3";
+import CoinSound from "./sound/coin.mp3";
 import CheerJackpotSound from "./sound/cheer_jackpot.mp3";
 import tmi from "tmi.js";
 import SoundList from "./SoundList";
@@ -19,13 +20,14 @@ const io = require("socket.io-client");
 
 const gifCount = 40;
 const bgifCount = 25;
+const mainChannel = "#tetristhegrandmaster3";
 const channelList = ["tetristhegrandmaster3", "tgm3backend"];
 const cooldownNormal = [10000, 5000];
 const elevatedTime = 30000;
 const paramsHost = new URLSearchParams(window.location.search).get("host");
 //TODO
 const cooldownFast = [4000, 2000];
-const updateTimeLog = "2022/10/07 ver4";
+const updateTimeLog = "2025/07/06 ver1";
 const ln = ["ch", "en", "tw", "jp", "fr", "ko"];
 const lnCount = 6;
 const SSR_LIST = [
@@ -82,6 +84,7 @@ class App extends Component {
     subGift: false,
     basilisk: false,
     giftBoost: false,
+    coin: false,
     kero: false,
     mao: false,
     soundEffect: null,
@@ -115,7 +118,7 @@ class App extends Component {
   componentDidMount = async () => {
     await this.getSetting();
     await this.initTmi();
-    await this.badgeInit();
+    //await this.badgeInit();
   };
 
   badgeInit = async () => {
@@ -215,6 +218,7 @@ class App extends Component {
         this.setState({
           basilisk: data.basilisk,
           giftBoost: data.gift,
+          coin: data.coin,
           lnStatus: data.lang,
           source: data.source,
         });
@@ -437,6 +441,7 @@ class App extends Component {
     client.on(
       "subscription",
       (channel, username, method, message, userstate) => {
+        if (channel !== mainChannel) return;
         if (method.plan === "3000") {
           let playList = [];
           let msg = "";
@@ -515,6 +520,7 @@ class App extends Component {
       "resub",
       (channel, username, months, message, userstate, methods) => {
         console.log(methods);
+        if (channel !== mainChannel) return;
         if (methods.plan === "3000") {
           let playList = [];
           let msg = "";
@@ -590,6 +596,9 @@ class App extends Component {
       }
     );
     client.on("cheer", (channel, userstate, message) => {
+      if (channel !== mainChannel) return;
+      console.log(userstate);
+      if (userstate["source-room-id"] && (userstate["source-room-id"] !== userstate["room-id"]) ) return;
       if (this.state.source) {
         let data = {};
         let result;
@@ -633,6 +642,7 @@ class App extends Component {
     client.on(
       "subgift",
       (channel, username, streakMonths, recipient, methods, userstate) => {
+        if (channel !== mainChannel) return;
         if (methods.plan === "3000") {
           let playList = [];
           let data = {
@@ -828,6 +838,14 @@ class App extends Component {
               : false,
         });
         console.log("Sub Gift Boost");
+      }
+      if (isMod && msg.split(" ")[0].toLowerCase() === "!coin") {
+        this.setState({
+          coin:
+            msg.split(" ")[1] && msg.split(" ")[1].toLowerCase() === "on"
+              ? true
+              : false,
+        });
       }
       if (isMod && msg.split(" ")[0].toLowerCase() === "!source") {
         this.setState({
@@ -1166,6 +1184,9 @@ class App extends Component {
         if (sResult === "ur") bsound = SubSoundSSRare;
         if (sResult === "ssr") bsound = SubSoundRare;
         current.soundUrl.unshift(bsound);
+      }
+      if (current.type === "c" &&  this.state.coin) {
+        current.soundUrl.unshift(CoinSound);
       }
       let img = this.state.basilisk ? this.getImgRandom(true) : current.cheerImg;
       if (current.doodle) {
